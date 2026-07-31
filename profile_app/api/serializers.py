@@ -33,3 +33,13 @@ class ProfilSerializer(serializers.ModelSerializer):
             'type',
             'created_at'
         ]
+
+    def update(self, instance, validated_data):
+        """Update the profile and the related user."""
+        user_data = validated_data.pop('user', {})
+
+        for attr, value in user_data.items():
+            setattr(instance.user, attr, value)
+        instance.user.save()
+
+        return super().update(instance, validated_data)
