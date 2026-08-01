@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from auth_app.models import UserProfile
 from django.contrib.auth.models import User
-from django.utils.timezone import now
 class ProfilSerializer(serializers.ModelSerializer):
 
     user = serializers.IntegerField(source='user.id', read_only=True)
