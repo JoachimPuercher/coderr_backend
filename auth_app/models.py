@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     type = models.CharField(choices=UserTypeChoices.choices, max_length=20)
     file = models.ImageField(upload_to='image_uploads/', blank=True)
+    uploaded_at = models.DateTimeField(blank=True, null=True)
     location = models.CharField(max_length=50, default="")
     tel = models.CharField(max_length=50, default="")
     description = models.TextField(default="")
