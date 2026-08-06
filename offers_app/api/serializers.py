@@ -42,13 +42,23 @@ class OfferMainSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         details_data = validated_data.pop('details')
+        detail_choices = []
+        for i in details_data:
+            detail_choices.append(i["offer_type"])
 
-        if len(details_data) == 3: 
-            offer = Offer.objects.create(**validated_data)
-            for detail in details_data:
-                OfferDetail.objects.create(offer=offer, **detail)
-            return offer
+        if detail_choices[0] != detail_choices[1] != detail_choices[2]:
+
+
+            print(detail_choices[0])
+
+            if len(details_data) == 3: 
+                offer = Offer.objects.create(**validated_data)
+                for detail in details_data:
+                    OfferDetail.objects.create(offer=offer, **detail)
+                return offer
+            else:
+                raise serializers.ValidationError("Missing details, there musst be exact three details.")
         else:
-            raise serializers.ValidationError("Missing details, there musst be exact three details.")
+            raise serializers.ValidationError("There musst be exact three different details.")
 
 

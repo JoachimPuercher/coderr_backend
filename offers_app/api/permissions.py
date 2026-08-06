@@ -5,9 +5,13 @@ from rest_framework.permissions import SAFE_METHODS
 
 class IsBussinesUser(BasePermission):
 
-    message = "You are not allowed, only business user can create offers."
-
     def has_permission(self, request, view):
 
-        if request.user.userprofile.type == 'business_user':
+        if request.method in SAFE_METHODS:
             return True
+
+        if request.user.userprofile.type == 'business_user':
+            self.message = "You are not allowed, only business user can create offers."
+            return True
+
+        return False
