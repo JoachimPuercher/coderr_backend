@@ -1,5 +1,5 @@
 from offers_app.models import Offer
-from django.db.models import Min
+from django.db.models import Min, Max
 from django_filters import FilterSet, NumberFilter
 
 class OfferFilter(FilterSet):
@@ -19,4 +19,4 @@ class OfferFilter(FilterSet):
 
     def filter_max_delivery_time(self, queryset, name, value):
         return queryset.annotate(
-            min_delivery_time=Min("details__delivery_time_in_days")).filter(min_delivery_time__lte=value)
+            max_delivery_time=Max("details__delivery_time_in_days")).filter(max_delivery_time__lte=value)
