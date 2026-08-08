@@ -6,7 +6,6 @@ urlpatterns = [
     path('offers/', OfferListCreateView.as_view(), name='offer'),
     path('offers/<int:id>/', OfferSingleView.as_view(), name='singleoffer'),
     path('offerdetails/<int:id>/', OfferDetailRetrieveView.as_view(), name='offerdetails')
-    # path('offers/<int:id>/', OfferDetailView.as_view(), name='offer_detail'),
 ]
 
 
