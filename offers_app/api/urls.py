@@ -6,3 +6,6 @@ urlpatterns = [
     path('offers/', OfferMainView.as_view(), name='offer')
     # path('offers/<int:id>/', OfferDetailView.as_view(), name='offer_detail'),
 ]
+
+
+# /api/offers - POST am Ende fertig bauen - nested detail serializer sobald die offerdetail view steht.

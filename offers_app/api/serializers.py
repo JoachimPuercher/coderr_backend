@@ -22,7 +22,7 @@ class OfferMainDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
-class OfferMainSerializer(serializers.ModelSerializer):
+class OfferMainWriteSerializer(serializers.ModelSerializer):
 
     details = OfferMainDetailSerializer(many=True)
 
@@ -56,5 +56,22 @@ class OfferMainSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("There musst be exact three different details.")
         else:
             raise serializers.ValidationError("Missing details, there musst be exact three details.")
+
+class DetailsSerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField(source="details.id")
+    # url = serializers.HyperlinkedRelatedField()
+    class Meta:
+
+        model = OfferDetail
+        fields = ["id"]
+class OfferMainReadSerializer(serializers.ModelSerializer):
+
+    user = serializers.IntegerField(source="user_id")
+    details = DetailsSerializer(many=True)
+    class Meta:
+
+        model = Offer
+
+        fields = ["id", "user", "title", "image", "description", "created_at", "updated_at", "details"] 
 
 
