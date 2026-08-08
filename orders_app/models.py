@@ -10,8 +10,8 @@ class OrderTypeChoices(models.TextChoices):
     CANCELLED = "cancelled"
 
 class Orders(models.Model):
-    customer_user = models.OneToOneField(User, on_delete=models.SET_NULL)
-    business_user = models.OneToOneField(User, on_delete=models.SET_NULL)
+    customer_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="customer_user_order")
+    business_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="business_user_order")
     title = models.CharField(default="")
     revisions = models.IntegerField()
     delivery_time_in_days = models.IntegerField()
