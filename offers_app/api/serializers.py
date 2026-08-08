@@ -6,7 +6,7 @@ from django.db.models import Min, Max
 
 class OfferDetailSerializer(serializers.ModelSerializer):
 
-    price = serializers.SerializerMethodField(source="price")
+    price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10)
     class Meta:
 
         model = OfferDetail
@@ -21,9 +21,6 @@ class OfferDetailSerializer(serializers.ModelSerializer):
             'offer_type' 
         ]
         read_only_fields = ['id']
-
-    def get_price(self, obj):
-        return float(obj.price)
 
 
 class OfferWriteSerializer(serializers.ModelSerializer):
