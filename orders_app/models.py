@@ -9,7 +9,7 @@ class OrderTypeChoices(models.TextChoices):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
 
-class Orders(models.Model):
+class Order(models.Model):
     customer_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="customer_user_order")
     business_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="business_user_order")
     title = models.CharField(default="")
