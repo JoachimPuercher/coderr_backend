@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import OfferListCreateView
+from .views import OfferListCreateView, OfferDetailRetrieveView
 
 
 urlpatterns = [
-    path('offers/', OfferListCreateView.as_view(), name='offer')
+    path('offers/', OfferListCreateView.as_view(), name='offer'),
+    path('offerdetails/<int:id>/', OfferDetailRetrieveView.as_view(), name='offerdetails')
     # path('offers/<int:id>/', OfferDetailView.as_view(), name='offer_detail'),
 ]
 
