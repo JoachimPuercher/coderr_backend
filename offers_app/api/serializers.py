@@ -59,11 +59,11 @@ class OfferWriteSerializer(serializers.ModelSerializer):
 
 class OfferDetailLinkSerializer(serializers.ModelSerializer):
     # id = serializers.IntegerField(source="details.id")
-    # url = serializers.HyperlinkedRelatedField()
+    url = serializers.HyperlinkedIdentityField(view_name = "offerdetails", lookup_url_kwarg = "id")
     class Meta:
 
         model = OfferDetail
-        fields = ["id"]
+        fields = ["id", "url"]
 class OfferListSerializer(serializers.ModelSerializer):
 
     user = serializers.IntegerField(source="user_id")

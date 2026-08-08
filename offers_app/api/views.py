@@ -35,4 +35,3 @@ class OfferDetailRetrieveView(generics.RetrieveAPIView):
     queryset = OfferDetail.objects.all()
     lookup_url_kwarg = "id"
     serializer_class = OfferDetailSerializer
-    
