@@ -1,14 +1,14 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
-from .serializers import OfferMainWriteSerializer, OfferMainReadSerializer
+from .serializers import OfferWriteSerializer, OfferListSerializer
 from .permissions import IsBussinesUser
 from offers_app.models import Offer
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import OfferFilter
 from .pagination import OfferPagination
 
-class OfferMainView(generics.ListCreateAPIView):
+class OfferListCreateView(generics.ListCreateAPIView):
     queryset = Offer.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = OfferFilter
@@ -27,5 +27,5 @@ class OfferMainView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
           if self.request.method == "POST":
-               return OfferMainWriteSerializer
-          return OfferMainReadSerializer
+               return OfferWriteSerializer
+          return OfferListSerializer

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from offers_app.models import Offer, OfferDetail
 
 
-class OfferMainDetailSerializer(serializers.ModelSerializer):
+class OfferDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
 
@@ -22,9 +22,9 @@ class OfferMainDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
-class OfferMainWriteSerializer(serializers.ModelSerializer):
+class OfferWriteSerializer(serializers.ModelSerializer):
 
-    details = OfferMainDetailSerializer(many=True)
+    details = OfferDetailSerializer(many=True)
 
     class Meta:
 
@@ -57,17 +57,17 @@ class OfferMainWriteSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("Missing details, there musst be exact three details.")
 
-class DetailsSerializer(serializers.ModelSerializer):
+class OfferDetailLinkSerializer(serializers.ModelSerializer):
     # id = serializers.IntegerField(source="details.id")
     # url = serializers.HyperlinkedRelatedField()
     class Meta:
 
         model = OfferDetail
         fields = ["id"]
-class OfferMainReadSerializer(serializers.ModelSerializer):
+class OfferListSerializer(serializers.ModelSerializer):
 
     user = serializers.IntegerField(source="user_id")
-    details = DetailsSerializer(many=True)
+    details = OfferDetailLinkSerializer(many=True)
     class Meta:
 
         model = Offer
