@@ -1,11 +1,10 @@
 from rest_framework import serializers
-from orders_app.models import Order
+from orders_app.models import Order, OrderTypeChoices
 from offers_app.models import OfferDetail
 from django.shortcuts import get_object_or_404
 
-class OrderRetrieveWriteSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
 
-    offer_detail_id = serializers.IntegerField(write_only=True)
     price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10, read_only=True)
 
     class Meta:
@@ -13,7 +12,6 @@ class OrderRetrieveWriteSerializer(serializers.ModelSerializer):
         model = Order
 
         fields = [
-            "offer_detail_id",
             "id", 
             "customer_user", 
             "business_user", 
@@ -37,8 +35,7 @@ class OrderRetrieveWriteSerializer(serializers.ModelSerializer):
             "delivery_time_in_days", 
             "price", 
             "features", 
-            "offer_type", 
-            "status", 
+            "offer_type",  
             "created_at", 
             "updated_at"
         ]
@@ -63,7 +60,31 @@ class OrderRetrieveWriteSerializer(serializers.ModelSerializer):
         return order
         
 
-    # offer mit der id in offer details suchen.
-    # alle keys an validated data anhängen
-    # save() ausführen
-    # instanz zurück geben
+class OrderRetrieveWriteSerializer(OrderSerializer):
+
+    offer_detail_id = serializers.IntegerField(write_only=True)
+
+    class Meta(OrderSerializer.Meta):
+
+        fields = OrderSerializer.Meta.fields + ["offer_detail_id"]
+
+
+class OrderUpdateSerializer(OrderSerializer):
+
+    status = serializers.ChoiceField(choices=OrderTypeChoices.choices)
+
+    class Meta(OrderSerializer.Meta):
+
+        fields = OrderSerializer.Meta.fields
+
+    def validate(self, attrs):
+        sent = set(self.initial_data)
+        allowed = set(attrs)
+        too_much = sent - allowed
+
+        if too_much:
+            raise serializers.ValidationError(f"Not allowed. {", ".join(too_much)}")
+        else:
+            return attrs
+        
+  
