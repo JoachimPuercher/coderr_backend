@@ -9,3 +9,13 @@ class IsCustomer(BasePermission):
 
         profile = getattr(request.user, "userprofile", None)
         return profile is not None and profile.type == "customer"
+
+
+class IsBusinessUser(BasePermission):
+
+    def has_permission(self, request, view):
+
+        self.message = "You are not a business user of coderr."
+
+        profile = getattr(request.user, "userprofile", None)
+        return profile is not None and profile.type == "business_user"
