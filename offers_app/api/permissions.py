@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.permissions import SAFE_METHODS
 
 
-class IsBussinesUser(BasePermission):
+class IsBusinessUser(BasePermission):
 
     def has_permission(self, request, view):
 

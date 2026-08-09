@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import OfferWriteSerializer, OfferListSerializer, OfferRetrieveSerializer, OfferDetailSerializer
-from .permissions import IsBussinesUser, IsOfferCreator
+from .permissions import IsBusinessUser, IsOfferCreator
 from offers_app.models import Offer, OfferDetail
 from django.db.models import Min
 from django_filters.rest_framework import DjangoFilterBackend
@@ -27,7 +27,7 @@ class OfferListCreateView(generics.ListCreateAPIView):
         if self.request.method in SAFE_METHODS:
             return [AllowAny()]
         else:
-            return [IsAuthenticated(), IsBussinesUser()]
+            return [IsAuthenticated(), IsBusinessUser()]
 
     def get_serializer_class(self):
         if self.request.method == "POST":
