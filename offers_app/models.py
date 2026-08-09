@@ -9,6 +9,8 @@ class OfferTypeChoices(models.TextChoices):
 
 
 class Offer(models.Model):
+    """A service a business user offers, split into three packages."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="offer_images/", blank=True, null=True)
@@ -18,6 +20,8 @@ class Offer(models.Model):
 
 
 class OfferDetail(models.Model):
+    """One package of an offer with its own price and scope."""
+
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="details")
     title = models.CharField(max_length=255)
     revisions = models.IntegerField()
@@ -28,6 +32,7 @@ class OfferDetail(models.Model):
 
     class Meta:
         constraints = [
+            # every type may exist only once per offer
             models.UniqueConstraint(
                 fields=["offer", "offer_type"],
                 name="unique_offer_type_per_offer",

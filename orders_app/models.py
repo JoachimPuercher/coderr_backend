@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from offers_app.models import OfferTypeChoices
 
-# Create your models here.
 
 class OrderTypeChoices(models.TextChoices):
     IN_PROGRESS = "in_progress"
@@ -10,6 +9,13 @@ class OrderTypeChoices(models.TextChoices):
     CANCELLED = "cancelled"
 
 class Order(models.Model):
+    """A booked offer package.
+
+    The conditions are copied from the OfferDetail instead of being linked, so a later
+    change to the offer does not rewrite orders that were already placed.
+    """
+
+    # SET_NULL keeps the order as a record even after one of the users is gone
     customer_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="customer_user_order")
     business_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="business_user_order")
     title = models.CharField(default="")

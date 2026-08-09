@@ -10,6 +10,9 @@ from .filters import OfferFilter
 from .pagination import OfferPagination
 
 class OfferListCreateView(generics.ListCreateAPIView):
+    """Public offer list with search, filters and paging; only business users may post."""
+
+    # the two minimums are computed by the database so they stay filterable and sortable
     queryset = Offer.objects.annotate(
         min_price=Min("details__price"),
         min_delivery_time=Min("details__delivery_time_in_days"),
@@ -21,6 +24,7 @@ class OfferListCreateView(generics.ListCreateAPIView):
     pagination_class = OfferPagination
 
     def perform_create(self, serializer):
+        # the creator comes from the token, never from the payload
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
@@ -36,17 +40,22 @@ class OfferListCreateView(generics.ListCreateAPIView):
 
 
 class OfferDetailRetrieveView(generics.RetrieveAPIView):
+    """Single package, linked from the details list of an offer."""
+
     queryset = OfferDetail.objects.all()
     lookup_url_kwarg = "id"
     serializer_class = OfferDetailSerializer
 
 
 class OfferSingleView(generics.RetrieveUpdateDestroyAPIView):
+    """Read, edit or delete one offer. Editing is limited to its creator."""
+
     queryset = Offer.objects.annotate(
         min_price=Min("details__price"),
         min_delivery_time=Min("details__delivery_time_in_days"),
     )
     lookup_url_kwarg = "id"
+    # the parent class would also offer PUT, which the API does not support
     http_method_names = ["get", "patch", "delete", "options"]
 
     def get_serializer_class(self):

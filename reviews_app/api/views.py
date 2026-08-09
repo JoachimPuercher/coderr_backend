@@ -9,6 +9,7 @@ from orders_app.api.permissions import IsCustomer
 from .permissions import IsReviewOwner
 
 class ReviewListCreateView(generics.ListCreateAPIView):
+    """Review list, filterable by user. Only customers may write one."""
 
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
@@ -17,6 +18,7 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     ordering_fields = ["updated_at", "rating"]
 
     def perform_create(self, serializer):
+        # the author comes from the token, the payload must not decide who reviews
         serializer.save(reviewer=self.request.user)
 
     def get_permissions(self):
@@ -28,15 +30,17 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 
 
 class ReviewUpdateDestroyView(
-    mixins.UpdateModelMixin, 
-    mixins.DestroyModelMixin, 
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     generics.GenericAPIView):
+    """Edit or delete a single review, author only. No GET and no PUT here."""
 
     lookup_url_kwarg = "id"
     serializer_class = ReviewUpdateSerializer
     queryset = Review.objects.all()
     permission_classes = [IsAuthenticated, IsReviewOwner]
 
+    # the mixins bring update() and destroy(), the mapping to the verbs is ours
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 

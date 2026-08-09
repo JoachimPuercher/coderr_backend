@@ -8,11 +8,17 @@ from auth_app.models import UserProfile
 from offers_app.models import Offer
 
 class RetrieveBaseInfos(APIView):
+    """Platform figures for the landing page.
+
+    No serializer here: the answer is an evaluation, not a resource, so the dict is
+    assembled by hand.
+    """
 
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         reviews_count = Review.objects.count()
+        # default=0 keeps the average a number while there are no reviews yet
         average_rating = Review.objects.aggregate(Avg("rating", default=0))
         profile_count = UserProfile.objects.filter(type="business_user").count()
         offer_count = Offer.objects.count()

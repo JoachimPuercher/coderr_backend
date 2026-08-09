@@ -5,7 +5,9 @@ from offers_app.models import Offer, OfferDetail
 from django.db.models import Min, Max
 
 class OfferDetailSerializer(serializers.ModelSerializer):
+    """A single package (basic, standard, premium) of an offer."""
 
+    # coerce_to_string=False keeps the price a JSON number instead of "100.00"
     price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10)
     class Meta:
 
@@ -18,12 +20,13 @@ class OfferDetailSerializer(serializers.ModelSerializer):
             'delivery_time_in_days',
             'price',
             'features',
-            'offer_type' 
+            'offer_type'
         ]
         read_only_fields = ['id']
 
 
 class OfferWriteSerializer(serializers.ModelSerializer):
+    """Write side of an offer: carries the three packages as nested details."""
 
     details = OfferDetailSerializer(many=True)
 
@@ -41,7 +44,7 @@ class OfferWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
     def update(self, instance, validated_data):
-
+        """Update the offer and match every sent detail by its offer_type."""
         details_data = validated_data.pop("details", None)
 
         for attr, value in validated_data.items():
@@ -50,6 +53,7 @@ class OfferWriteSerializer(serializers.ModelSerializer):
 
         if details_data is not None:
             for detail_data in details_data:
+                # details carry no id in the payload, so offer_type is the only way to find them
                 offer_type = detail_data.get("offer_type")
                 if not offer_type:
                     raise serializers.ValidationError("Every detail must contain an offer_type.")
@@ -63,7 +67,7 @@ class OfferWriteSerializer(serializers.ModelSerializer):
         return instance
 
     def create(self, validated_data):
-
+        """Create the offer with exactly three details of different types."""
         details_data = validated_data.pop('details')
         detail_choices = []
         for i in details_data:
@@ -81,6 +85,8 @@ class OfferWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Missing details, there musst be exact three details.")
 
 class OfferDetailLinkSerializer(serializers.ModelSerializer):
+    """Shrinks a detail to id plus link, which is what the offer list shows."""
+
     url = serializers.HyperlinkedIdentityField(view_name = "offerdetails", lookup_url_kwarg = "id")
     class Meta:
 
@@ -89,6 +95,7 @@ class OfferDetailLinkSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    """Name block of the offer creator."""
 
     class Meta:
 
@@ -97,9 +104,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "username"]
 
 class OfferRetrieveSerializer(serializers.ModelSerializer):
+    """Read side of a single offer."""
 
     user = serializers.IntegerField(source="user_id", read_only=True)
     details = OfferDetailLinkSerializer(many=True)
+    # both values are annotated on the queryset in the view, not stored on the model
     min_price = serializers.FloatField(read_only=True)
     min_delivery_time = serializers.IntegerField(read_only=True)
 
@@ -122,6 +131,7 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
 
 
 class OfferListSerializer(OfferRetrieveSerializer):
+    """Same as the single offer plus the creator block the list view needs."""
 
     user_details = UserDetailSerializer(source="user")
 

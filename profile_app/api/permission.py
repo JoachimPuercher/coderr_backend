@@ -4,6 +4,7 @@ from rest_framework.permissions import SAFE_METHODS
 
 
 class ProfileDetailPermission(BasePermission):
+    """Everyone may read a profile, only its owner may change it."""
 
     message = "You have no permission to change that profile."
 
