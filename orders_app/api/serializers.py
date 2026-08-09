@@ -1,17 +1,22 @@
-from rest_framework import serializers
-from orders_app.models import Order, OrderTypeChoices
-from offers_app.models import OfferDetail
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+
+from offers_app.models import OfferDetail
+from orders_app.models import Order, OrderTypeChoices
+
 
 class OrderSerializer(serializers.ModelSerializer):
     """Read side of an order. Everything is read-only, the children open up single fields."""
 
-    price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10, read_only=True)
+    price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        coerce_to_string=False,
+        read_only=True,
+    )
 
     class Meta:
-
         model = Order
-
         fields = [
             "id",
             "customer_user",
@@ -24,9 +29,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "offer_type",
             "status",
             "created_at",
-            "updated_at"
-            ]
-
+            "updated_at",
+        ]
         read_only_fields = [
             "id",
             "customer_user",
@@ -39,7 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "offer_type",
             "status",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
 
     def create(self, validated_data):
@@ -49,16 +53,16 @@ class OrderSerializer(serializers.ModelSerializer):
         offer = get_object_or_404(OfferDetail, pk=new_offer_id)
         # the conditions are copied, not linked, so a later price change leaves the order untouched
         order = Order.objects.create(
-            customer_user_id = new_offer_user_id,
-            business_user_id = offer.offer.user_id,
-            title = offer.title,
-            revisions = offer.revisions,
-            delivery_time_in_days = offer.delivery_time_in_days,
-            price = offer.price,
-            features = offer.features,
-            offer_type = offer.offer_type,
-            status = "in_progress"
-            )
+            customer_user_id=new_offer_user_id,
+            business_user_id=offer.offer.user_id,
+            title=offer.title,
+            revisions=offer.revisions,
+            delivery_time_in_days=offer.delivery_time_in_days,
+            price=offer.price,
+            features=offer.features,
+            offer_type=offer.offer_type,
+            status="in_progress",
+        )
 
         return order
 
@@ -69,7 +73,6 @@ class OrderRetrieveWriteSerializer(OrderSerializer):
     offer_detail_id = serializers.IntegerField(write_only=True)
 
     class Meta(OrderSerializer.Meta):
-
         fields = OrderSerializer.Meta.fields + ["offer_detail_id"]
 
 
@@ -80,7 +83,6 @@ class OrderUpdateSerializer(OrderSerializer):
     status = serializers.ChoiceField(choices=OrderTypeChoices.choices)
 
     class Meta(OrderSerializer.Meta):
-
         fields = OrderSerializer.Meta.fields
 
     def validate(self, attrs):
@@ -91,6 +93,6 @@ class OrderUpdateSerializer(OrderSerializer):
         too_much = sent - allowed
 
         if too_much:
-            raise serializers.ValidationError(f"Not allowed. {", ".join(too_much)}")
+            raise serializers.ValidationError(f"Not allowed. {', '.join(too_much)}")
         else:
             return attrs

@@ -1,22 +1,26 @@
-from rest_framework import generics, mixins, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from orders_app.models import Order
-from .serializers import OrderRetrieveWriteSerializer, OrderUpdateSerializer
-from django.db.models import Q
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAdminUser
-from .permissions import IsCustomer, IsBusinessUser
 from django.contrib.auth.models import User
+from django.db.models import Q
+from rest_framework import generics, mixins, status
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from orders_app.models import Order
+
+from .permissions import IsCustomer, IsBusinessUser
+from .serializers import OrderRetrieveWriteSerializer, OrderUpdateSerializer
+
 
 class OrderListCreateView(generics.ListCreateAPIView):
     """Orders of the logged in user, on either side of the deal. Only customers may order."""
 
     serializer_class = OrderRetrieveWriteSerializer
 
-
     def get_queryset(self):
         # everyone sees only their own orders, as customer or as provider
-        return Order.objects.filter(Q(customer_user=self.request.user) | Q(business_user=self.request.user))
+        return Order.objects.filter(
+            Q(customer_user=self.request.user) | Q(business_user=self.request.user)
+        )
 
     def get_permissions(self):
         if self.request.method in SAFE_METHODS:
@@ -28,7 +32,8 @@ class OrderListCreateView(generics.ListCreateAPIView):
 class OrderSingleUpdateDestroyView(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
-    generics.GenericAPIView):
+    generics.GenericAPIView,
+):
     """Status change by the provider, deletion by an admin. No GET and no PUT here."""
 
     lookup_url_kwarg = "id"
@@ -58,9 +63,13 @@ class OrderCountView(APIView):
         business_user = User.objects.filter(pk=business_id).first()
         if business_user:
             count = Order.objects.filter(business_user=business_id, status="in_progress")
-            return Response({"order_count" : count.count()}, status=status.HTTP_200_OK)
+            return Response({"order_count": count.count()}, status=status.HTTP_200_OK)
         else:
-            return Response({"Error" : "No business user with this id."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"Error": "No business user with this id."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
 
 class CompletedOrderCountView(APIView):
     """Same as above for finished orders."""
@@ -70,6 +79,9 @@ class CompletedOrderCountView(APIView):
         business_user = User.objects.filter(pk=business_id).first()
         if business_user:
             count = Order.objects.filter(business_user=business_id, status="completed")
-            return Response({"completed_order_count" : count.count()}, status=status.HTTP_200_OK)
+            return Response({"completed_order_count": count.count()}, status=status.HTTP_200_OK)
         else:
-            return Response({"Error" : "No business user with this id."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"Error": "No business user with this id."},
+                status=status.HTTP_404_NOT_FOUND,
+            )

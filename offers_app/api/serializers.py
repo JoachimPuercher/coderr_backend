@@ -1,16 +1,16 @@
-from rest_framework import serializers
-from auth_app.models import UserProfile
 from django.contrib.auth.models import User
+from rest_framework import serializers
+
 from offers_app.models import Offer, OfferDetail
-from django.db.models import Min, Max
+
 
 class OfferDetailSerializer(serializers.ModelSerializer):
     """A single package (basic, standard, premium) of an offer."""
 
     # coerce_to_string=False keeps the price a JSON number instead of "100.00"
     price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10)
-    class Meta:
 
+    class Meta:
         model = OfferDetail
 
         fields = [
@@ -31,15 +31,13 @@ class OfferWriteSerializer(serializers.ModelSerializer):
     details = OfferDetailSerializer(many=True)
 
     class Meta:
-
         model = Offer
-
         fields = [
             'id',
             'title',
             'image',
             'description',
-            'details'
+            'details',
         ]
         read_only_fields = ['id']
 
@@ -87,9 +85,9 @@ class OfferWriteSerializer(serializers.ModelSerializer):
 class OfferDetailLinkSerializer(serializers.ModelSerializer):
     """Shrinks a detail to id plus link, which is what the offer list shows."""
 
-    url = serializers.HyperlinkedIdentityField(view_name = "offerdetails", lookup_url_kwarg = "id")
-    class Meta:
+    url = serializers.HyperlinkedIdentityField(view_name="offerdetails", lookup_url_kwarg="id")
 
+    class Meta:
         model = OfferDetail
         fields = ["id", "url"]
 
@@ -98,10 +96,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
     """Name block of the offer creator."""
 
     class Meta:
-
         model = User
-
         fields = ["first_name", "last_name", "username"]
+
 
 class OfferRetrieveSerializer(serializers.ModelSerializer):
     """Read side of a single offer."""
@@ -113,9 +110,7 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
     min_delivery_time = serializers.IntegerField(read_only=True)
 
     class Meta:
-
         model = Offer
-
         fields = [
             "id",
             "user",
@@ -126,8 +121,8 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
             "updated_at",
             "details",
             "min_price",
-            "min_delivery_time"
-            ]
+            "min_delivery_time",
+        ]
 
 
 class OfferListSerializer(OfferRetrieveSerializer):
@@ -136,5 +131,4 @@ class OfferListSerializer(OfferRetrieveSerializer):
     user_details = UserDetailSerializer(source="user")
 
     class Meta(OfferRetrieveSerializer.Meta):
-
         fields = OfferRetrieveSerializer.Meta.fields + ["user_details"]

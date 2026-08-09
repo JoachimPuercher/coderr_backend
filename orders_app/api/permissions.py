@@ -5,7 +5,6 @@ class IsCustomer(BasePermission):
     """Only accounts with a customer profile pass."""
 
     def has_permission(self, request, view):
-
         self.message = "You are not a customer of coderr."
 
         # getattr with a default also covers AnonymousUser and users without a profile
@@ -17,7 +16,6 @@ class IsBusinessUser(BasePermission):
     """Only accounts with a business profile pass."""
 
     def has_permission(self, request, view):
-
         self.message = "You are not a business user of coderr."
 
         profile = getattr(request.user, "userprofile", None)

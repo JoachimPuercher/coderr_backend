@@ -1,13 +1,21 @@
-from rest_framework import generics
-from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
-from rest_framework.filters import SearchFilter, OrderingFilter
-from .serializers import OfferWriteSerializer, OfferListSerializer, OfferRetrieveSerializer, OfferDetailSerializer
-from .permissions import IsBusinessUser, IsOfferCreator
-from offers_app.models import Offer, OfferDetail
 from django.db.models import Min
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
+
+from offers_app.models import Offer, OfferDetail
+
 from .filters import OfferFilter
 from .pagination import OfferPagination
+from .permissions import IsBusinessUser, IsOfferCreator
+from .serializers import (
+    OfferWriteSerializer,
+    OfferListSerializer,
+    OfferRetrieveSerializer,
+    OfferDetailSerializer,
+)
+
 
 class OfferListCreateView(generics.ListCreateAPIView):
     """Public offer list with search, filters and paging; only business users may post."""

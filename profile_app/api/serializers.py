@@ -1,6 +1,8 @@
 from rest_framework import serializers
+
 from auth_app.models import UserProfile
-from django.contrib.auth.models import User
+
+
 class ProfilSerializer(serializers.ModelSerializer):
     """Full profile for the owner: flattens the related User onto the profile."""
 
@@ -26,10 +28,10 @@ class ProfilSerializer(serializers.ModelSerializer):
             'working_hours',
             'type',
             'email',
-            'created_at'
-            ]
+            'created_at',
+        ]
 
-        read_only_fields= [
+        read_only_fields = [
             'file',
             'type',
             'created_at'
@@ -54,6 +56,7 @@ class BusinessProfilSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
+
     class Meta:
 
         model = UserProfile

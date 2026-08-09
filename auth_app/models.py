@@ -1,10 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class UserTypeChoices(models.TextChoices):
     CUSTOMER = "customer"
     BUSINESS_USER = "business_user"
+
 
 class UserProfile(models.Model):
     """Coderr specific data next to Django's User, plus the role of the account.

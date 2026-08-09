@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from reviews_app.models import Review
 
 
@@ -6,7 +7,6 @@ class ReviewSerializer(serializers.ModelSerializer):
     """Read side and POST side of a review."""
 
     class Meta:
-
         model = Review
         fields = [
             "id",
@@ -15,14 +15,13 @@ class ReviewSerializer(serializers.ModelSerializer):
             "rating",
             "description",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
-
         read_only_fields = [
             "id",
             "reviewer",
             "created_at",
-            "updated_at"
+            "updated_at",
         ]
 
     def validate(self, attrs):
@@ -32,7 +31,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         reviewer = self.context["request"].user
         exists = Review.objects.filter(reviewer=reviewer, business_user=user).exists()
         if exists:
-            raise serializers.ValidationError({"error" : "You have already sent a review to that business."})
+            raise serializers.ValidationError(
+                {"error": "You have already sent a review to that business."}
+            )
         else:
             return attrs
 
@@ -41,7 +42,6 @@ class ReviewUpdateSerializer(ReviewSerializer):
     """PATCH side: rating and description stay writable, nothing else."""
 
     class Meta(ReviewSerializer.Meta):
-
         read_only_fields = ReviewSerializer.Meta.read_only_fields + ["business_user"]
 
     def validate(self, attrs):
@@ -52,6 +52,6 @@ class ReviewUpdateSerializer(ReviewSerializer):
         too_much = sent - allowed
 
         if too_much:
-            raise serializers.ValidationError(f"Not allowed. {", ".join(too_much)}")
+            raise serializers.ValidationError(f"Not allowed. {', '.join(too_much)}")
         else:
             return attrs

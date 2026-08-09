@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 from offers_app.models import OfferTypeChoices
 
 
@@ -7,6 +8,7 @@ class OrderTypeChoices(models.TextChoices):
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
+
 
 class Order(models.Model):
     """A booked offer package.
@@ -16,8 +18,18 @@ class Order(models.Model):
     """
 
     # SET_NULL keeps the order as a record even after one of the users is gone
-    customer_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="customer_user_order")
-    business_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="business_user_order")
+    customer_user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="customer_user_order",
+    )
+    business_user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="business_user_order",
+    )
     title = models.CharField(default="")
     revisions = models.IntegerField()
     delivery_time_in_days = models.IntegerField()

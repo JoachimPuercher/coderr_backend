@@ -1,12 +1,15 @@
-from rest_framework import generics, mixins
-from reviews_app.models import Review
-from .serializers import ReviewSerializer, ReviewUpdateSerializer
-from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
-from .filters import ReviewFilter
+from rest_framework import generics, mixins
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
+
 from orders_app.api.permissions import IsCustomer
+from reviews_app.models import Review
+
+from .filters import ReviewFilter
 from .permissions import IsReviewOwner
+from .serializers import ReviewSerializer, ReviewUpdateSerializer
+
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     """Review list, filterable by user. Only customers may write one."""
@@ -32,7 +35,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 class ReviewUpdateDestroyView(
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
-    generics.GenericAPIView):
+    generics.GenericAPIView,
+):
     """Edit or delete a single review, author only. No GET and no PUT here."""
 
     lookup_url_kwarg = "id"
