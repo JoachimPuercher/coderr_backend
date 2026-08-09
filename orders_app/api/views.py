@@ -1,10 +1,12 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from orders_app.models import Order
 from .serializers import OrderRetrieveWriteSerializer, OrderUpdateSerializer
 from django.db.models import Q
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAdminUser
 from .permissions import IsCustomer, IsBusinessUser
-
+from django.contrib.auth.models import User
 
 class OrderListCreateView(generics.ListCreateAPIView):
     serializer_class = OrderRetrieveWriteSerializer
@@ -41,4 +43,25 @@ class OrderSingleUpdateDestroyView(
         if self.request.method == "DELETE":
             return [IsAuthenticated(), IsAdminUser()]
 
-        
+
+class OrderCountView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        business_id = kwargs['business_user_id']
+        business_user = User.objects.filter(pk=business_id).first()
+        if business_user:
+            count = Order.objects.filter(business_user=business_id, status="in_progress")
+            return Response({"order_count" : count.count()}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Error" : "No business user with this id."}, status=status.HTTP_404_NOT_FOUND)
+
+class CompletedOrderCountView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        business_id = kwargs['business_user_id']
+        business_user = User.objects.filter(pk=business_id).first()
+        if business_user:
+            count = Order.objects.filter(business_user=business_id, status="completed")
+            return Response({"completed_order_count" : count.count()}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Error" : "No business user with this id."}, status=status.HTTP_404_NOT_FOUND)
