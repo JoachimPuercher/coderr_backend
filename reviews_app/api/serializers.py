@@ -24,4 +24,11 @@ class ReviewSerializer(serializers.ModelSerializer):
             "updated_at"
         ]
 
-        
+    def validate(self, attrs):
+        user = attrs["business_user"]
+        reviewer = self.context["request"].user
+        exists = Review.objects.filter(reviewer=reviewer, business_user=user).exists()
+        if exists:
+            raise serializers.ValidationError({"error" : "You have already sent a review to that business."})
+        else:
+            return attrs
