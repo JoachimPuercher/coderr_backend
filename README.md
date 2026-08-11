@@ -35,6 +35,7 @@ lists the expected keys:
 | `SECRET_KEY` | Django's signing key. No default — a missing value stops the server. |
 | `DEBUG` | `True` while developing, `False` everywhere else. |
 | `ALLOWED_HOSTS` | Comma separated list of domains the app answers for. |
+| `CORS_ALLOWED_ORIGINS` | Where the frontend runs, with scheme and port. |
 
 Generate a key with:
 
@@ -44,6 +45,11 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 The key signs sessions, CSRF tokens and password reset links. It never reaches the
 frontend and must not be committed — the per user API tokens are a separate thing.
+
+`CORS_ALLOWED_ORIGINS` decides which pages a browser lets talk to this API. The origin
+must match exactly: `http://127.0.0.1:5500` and `http://localhost:5500` count as two
+different ones, and a trailing slash breaks the match. If a request works in Postman but
+not in the browser, this is the first place to look.
 
 ### Dependencies
 
