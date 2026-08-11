@@ -15,6 +15,8 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
+Copy-Item .env.example .env      # then fill in SECRET_KEY, see below
+
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
@@ -22,6 +24,26 @@ python manage.py runserver
 
 The database is a local SQLite file and is **not** part of the repository — `migrate`
 creates it on first run.
+
+### Configuration
+
+Settings that differ per machine live in `.env`, which is gitignored. `.env.example`
+lists the expected keys:
+
+| Key | Meaning |
+|---|---|
+| `SECRET_KEY` | Django's signing key. No default — a missing value stops the server. |
+| `DEBUG` | `True` while developing, `False` everywhere else. |
+| `ALLOWED_HOSTS` | Comma separated list of domains the app answers for. |
+
+Generate a key with:
+
+```powershell
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+The key signs sessions, CSRF tokens and password reset links. It never reaches the
+frontend and must not be committed — the per user API tokens are a separate thing.
 
 ### Dependencies
 
@@ -36,12 +58,10 @@ A plain `>` redirect produces UTF-16 on Windows, which `pip install -r` cannot r
 
 ## Before going public
 
-`core/settings.py` still holds development defaults. Move them into environment
-variables (`python-dotenv` is already installed) before deploying:
-
-- `SECRET_KEY` — currently hard coded in the file
-- `DEBUG` — must be `False`
-- `ALLOWED_HOSTS` — must list the real domain
+- `DEBUG=False` in the `.env` of the server
+- `ALLOWED_HOSTS` set to the real domain
+- a **fresh** `SECRET_KEY`, never the one from a development machine
+- `python manage.py check --deploy` for the remaining warnings
 
 ## Project layout
 
