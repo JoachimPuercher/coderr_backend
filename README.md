@@ -3,10 +3,18 @@
 REST API for the Coderr platform, built with Django and Django REST Framework.
 Business users publish offers, customers order them and rate the provider afterwards.
 
-## Requirements
+## Stack
 
-- Python 3.13
-- The frontend expects the API under `http://127.0.0.1:8000/api/`
+| | |
+|---|---|
+| Python | 3.13 |
+| Django | 6.0 |
+| Django REST Framework | 3.17, token authentication |
+| django-filter | query parameter filtering |
+| django-cors-headers | browser access from the frontend |
+| Database | SQLite (development) |
+
+The frontend expects the API under `http://127.0.0.1:8000/api/`.
 
 ## Setup
 
@@ -23,7 +31,27 @@ python manage.py runserver
 ```
 
 The database is a local SQLite file and is **not** part of the repository — `migrate`
-creates it on first run.
+creates it on first run, empty.
+
+### First data
+
+The API distinguishes two roles, and most endpoints need one of them. Register one
+account of each type over the API itself, that also creates the matching profile:
+
+```
+POST /api/registration/
+{ "username": "biz", "email": "biz@mail.de", "password": "…", "repeated_password": "…", "type": "business_user" }
+{ "username": "cust", "email": "cust@mail.de", "password": "…", "repeated_password": "…", "type": "customer" }
+```
+
+The response contains the token for the `Authorization` header. A superuser created with
+`createsuperuser` has **no** profile — it can reach the admin and delete orders, but not
+create offers or reviews.
+
+### Media files
+
+Offer images land in `media/` and are served by the development server only. The folder
+is gitignored; in production a web server delivers it.
 
 ### Configuration
 
@@ -119,6 +147,19 @@ Query parameters worth knowing:
 - offers: `?creator_id=`, `?min_price=`, `?max_delivery_time=`, `?search=`, `?ordering=`, `?page_size=`
 - reviews: `?business_user_id=`, `?reviewer_id=`, `?ordering=`
 
+The offer list is paginated (20 per page, `?page_size=` up to 50), so its answer is an
+object with `count`, `next`, `previous` and `results`. All other lists return a plain array.
+
+### Status codes
+
+| Code | When |
+|---|---|
+| 400 | payload fails validation, or carries a field the endpoint does not accept |
+| 401 | no or unknown token |
+| 403 | authenticated, but the wrong role or not the owner of the object |
+| 404 | the id does not exist, or the object is outside the caller's queryset |
+| 405 | the endpoint does not offer this method, e.g. PUT |
+
 ## Tests
 
 ```powershell
@@ -146,3 +187,20 @@ Add `-v 2` for single test names and `--failfast` to stop at the first error.
 
 Run the debugger through `manage.py`, never on a single file — otherwise
 `DJANGO_SETTINGS_MODULE` is missing.
+
+## Troubleshooting
+
+| Symptom | Cause |
+|---|---|
+| `KeyError: 'SECRET_KEY'` on start | no `.env`, or the key is empty |
+| Works in Postman, blocked in the browser | origin missing in `CORS_ALLOWED_ORIGINS`, or written with a trailing slash |
+| `DisallowedHost` | the host is missing in `ALLOWED_HOSTS` |
+| `pip install -r` cannot read the file | `requirements.txt` was written as UTF-16, see above |
+| A filter is ignored instead of failing | unknown query parameters are dropped silently — check the spelling |
+| `Enter a number` on a filter | the value is not numeric, e.g. a trailing `/` behind the number |
+| Tests are not found | the app has both a `tests.py` and a `tests/` folder |
+
+## About
+
+Apprenticeship project for the Developer Akademie. The frontend is a separate
+repository and consumes this API.
