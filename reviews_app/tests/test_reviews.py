@@ -19,7 +19,7 @@ class ReviewTests(APITestCase):
         self.other_customer_token = Token.objects.create(user=self.other_customer)
 
         self.business = User.objects.create_user(username='biz', password='SicheresPW123')
-        UserProfile.objects.create(user=self.business, type='business_user')
+        UserProfile.objects.create(user=self.business, type='business')
 
         self.url = '/api/reviews/'
         self.payload = {'business_user': self.business.pk, 'rating': 4, 'description': 'Solid work.'}

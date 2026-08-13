@@ -13,7 +13,7 @@ class BaseInfoTests(APITestCase):
         self.url = '/api/base-info/'
 
         self.business = User.objects.create_user(username='biz', password='SicheresPW123')
-        UserProfile.objects.create(user=self.business, type='business_user')
+        UserProfile.objects.create(user=self.business, type='business')
 
         self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')

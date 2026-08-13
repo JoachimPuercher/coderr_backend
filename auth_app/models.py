@@ -4,7 +4,7 @@ from django.db import models
 
 class UserTypeChoices(models.TextChoices):
     CUSTOMER = "customer"
-    BUSINESS_USER = "business_user"
+    BUSINESS = "business"
 
 
 class UserProfile(models.Model):

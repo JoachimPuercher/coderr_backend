@@ -1,13 +1,13 @@
-from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import generics, mixins, status
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from auth_app.models import UserProfile
 from orders_app.models import Order
 
-from .permissions import IsCustomer, IsBusinessUser
+from .permissions import IsCustomer, IsBusinessUser, IsOrderProvider
 from .serializers import OrderRetrieveWriteSerializer, OrderUpdateSerializer
 
 
@@ -23,10 +23,10 @@ class OrderListCreateView(generics.ListCreateAPIView):
         )
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsAuthenticated()]
         if self.request.method == "POST":
             return [IsAuthenticated(), IsCustomer()]
+        # covers the safe methods and every verb without a handler, which then ends in 405
+        return [IsAuthenticated()]
 
 
 class OrderSingleUpdateDestroyView(
@@ -49,9 +49,11 @@ class OrderSingleUpdateDestroyView(
 
     def get_permissions(self):
         if self.request.method == "PATCH":
-            return [IsAuthenticated(), IsBusinessUser()]
+            return [IsAuthenticated(), IsBusinessUser(), IsOrderProvider()]
         if self.request.method == "DELETE":
             return [IsAuthenticated(), IsAdminUser()]
+        # without this the preflight OPTIONS would crash instead of being answered
+        return [IsAuthenticated()]
 
 
 class OrderCountView(APIView):
@@ -59,8 +61,8 @@ class OrderCountView(APIView):
 
     def get(self, request, *args, **kwargs):
         business_id = kwargs['business_user_id']
-        # an unknown id would silently count to zero, so the user is checked first
-        business_user = User.objects.filter(pk=business_id).first()
+        # the id has to belong to a business profile, any other one would count to zero
+        business_user = UserProfile.objects.filter(user_id=business_id, type="business").first()
         if business_user:
             count = Order.objects.filter(business_user=business_id, status="in_progress")
             return Response({"order_count": count.count()}, status=status.HTTP_200_OK)
@@ -76,7 +78,7 @@ class CompletedOrderCountView(APIView):
 
     def get(self, request, *args, **kwargs):
         business_id = kwargs['business_user_id']
-        business_user = User.objects.filter(pk=business_id).first()
+        business_user = UserProfile.objects.filter(user_id=business_id, type="business").first()
         if business_user:
             count = Order.objects.filter(business_user=business_id, status="completed")
             return Response({"completed_order_count": count.count()}, status=status.HTTP_200_OK)

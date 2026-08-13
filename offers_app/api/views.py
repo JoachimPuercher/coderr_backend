@@ -20,11 +20,12 @@ from .serializers import (
 class OfferListCreateView(generics.ListCreateAPIView):
     """Public offer list with search, filters and paging; only business users may post."""
 
-    # the two minimums are computed by the database so they stay filterable and sortable
+    # the two minimums are computed by the database so they stay filterable and sortable;
+    # the order_by keeps pagination stable, otherwise rows may repeat across pages
     queryset = Offer.objects.annotate(
         min_price=Min("details__price"),
         min_delivery_time=Min("details__delivery_time_in_days"),
-    )
+    ).order_by("-updated_at")
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = OfferFilter
     search_fields = ["title", "description"]
@@ -73,11 +74,7 @@ class OfferSingleView(generics.RetrieveUpdateDestroyAPIView):
         return OfferWriteSerializer
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsAuthenticated()]
-
-        if self.request.method == "PATCH":
+        if self.request.method in ("PATCH", "DELETE"):
             return [IsAuthenticated(), IsOfferCreator()]
-
-        if self.request.method == "DELETE":
-            return [IsAuthenticated(), IsOfferCreator()]
+        # covers the safe methods and every verb without a handler, which then ends in 405
+        return [IsAuthenticated()]

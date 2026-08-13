@@ -13,12 +13,15 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfilSerializer
     queryset = UserProfile.objects.all()
     permission_classes = [IsAuthenticated, ProfileDetailPermission]
+    # the url carries the id of the USER, not of the profile row
+    lookup_field = "user_id"
+    lookup_url_kwarg = "pk"
 
 
 class BusinessProfileView(generics.ListAPIView):
     """All business profiles, used by the provider overview in the frontend."""
 
-    queryset = UserProfile.objects.filter(type="business_user")
+    queryset = UserProfile.objects.filter(type="business")
     serializer_class = BusinessProfilSerializer
 
 

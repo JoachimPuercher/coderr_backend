@@ -18,7 +18,7 @@ class ProfileDetailTests(APITestCase):
         )
         self.profile = UserProfile.objects.create(
             user=self.owner,
-            type='business_user',
+            type='business',
             location='Berlin',
             tel='0170123456',
         )
@@ -27,7 +27,8 @@ class ProfileDetailTests(APITestCase):
         self.other = User.objects.create_user(username='other', password='SicheresPW123')
         self.other_token = Token.objects.create(user=self.other)
 
-        self.url = f'/api/profile/{self.profile.pk}/'
+        # the url carries the user id, which is not necessarily the profile id
+        self.url = f'/api/profile/{self.owner.pk}/'
 
     def authenticate(self, token):
         """Send all following requests with the given token."""
@@ -89,3 +90,65 @@ class ProfileDetailTests(APITestCase):
         response = self.client.get('/api/profile/9999/')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ProfileLookupTests(APITestCase):
+    """The url of a profile carries the user id, not the id of the profile row."""
+
+    def setUp(self):
+        # a user without a profile pushes the two id sequences apart
+        User.objects.create_user(username='no_profile', password='SicheresPW123')
+
+        self.user = User.objects.create_user(username='owner', password='SicheresPW123')
+        self.profile = UserProfile.objects.create(user=self.user, type='business')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
+
+    def test_ids_really_diverge(self):
+        self.assertNotEqual(self.profile.pk, self.user.pk)
+
+    def test_profile_is_found_by_the_user_id(self):
+        response = self.client.get(f'/api/profile/{self.user.pk}/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['user'], self.user.pk)
+        self.assertEqual(response.data['username'], 'owner')
+
+    def test_profile_id_is_not_accepted(self):
+        response = self.client.get(f'/api/profile/{self.profile.pk}/')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ProfileListTests(APITestCase):
+    """Both list endpoints live under the documented plural path."""
+
+    def setUp(self):
+        self.business = User.objects.create_user(username='biz', password='SicheresPW123')
+        UserProfile.objects.create(user=self.business, type='business')
+
+        self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
+        UserProfile.objects.create(user=self.customer, type='customer')
+
+        token = Token.objects.create(user=self.customer)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+
+    def test_business_list_returns_only_business_profiles(self):
+        response = self.client.get('/api/profiles/business/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['type'], 'business')
+
+    def test_customer_list_returns_only_customer_profiles(self):
+        response = self.client.get('/api/profiles/customer/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['type'], 'customer')
+
+    def test_lists_need_authentication(self):
+        self.client.credentials()
+        response = self.client.get('/api/profiles/business/')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

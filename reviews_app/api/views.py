@@ -1,7 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 from orders_app.api.permissions import IsCustomer
 from reviews_app.models import Review
@@ -25,11 +25,10 @@ class ReviewListCreateView(generics.ListCreateAPIView):
         serializer.save(reviewer=self.request.user)
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [IsAuthenticated()]
-
         if self.request.method == "POST":
             return [IsAuthenticated(), IsCustomer()]
+        # covers the safe methods and every verb without a handler, which then ends in 405
+        return [IsAuthenticated()]
 
 
 class ReviewUpdateDestroyView(

@@ -26,7 +26,7 @@ class OfferTests(APITestCase):
 
     def setUp(self):
         self.business = User.objects.create_user(username='biz', password='SicheresPW123')
-        UserProfile.objects.create(user=self.business, type='business_user')
+        UserProfile.objects.create(user=self.business, type='business')
         self.business_token = Token.objects.create(user=self.business)
 
         self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
@@ -80,3 +80,12 @@ class OfferTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.offer.refresh_from_db()
         self.assertEqual(self.offer.title, 'Logo Design')
+
+    def test_unsupported_methods_do_not_crash(self):
+        self.authenticate(self.business_token)
+
+        options = self.client.options(f'/api/offers/{self.offer.pk}/')
+        put = self.client.put(f'/api/offers/{self.offer.pk}/', {'title': 'x'}, format='json')
+
+        self.assertEqual(options.status_code, status.HTTP_200_OK)
+        self.assertEqual(put.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

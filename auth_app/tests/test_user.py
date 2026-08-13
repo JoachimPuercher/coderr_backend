@@ -160,3 +160,15 @@ class LoginTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('username', response.data)
+
+
+class DocumentedUrlTests(APITestCase):
+    """The paths from the API documentation have to exist exactly as written."""
+
+    def test_registration_and_login_answer_under_their_documented_path(self):
+        registration = self.client.post('/api/registration/', {}, format='json')
+        login = self.client.post('/api/login/', {}, format='json')
+
+        # 400 because the body is empty; a 404 would mean the route does not exist
+        self.assertEqual(registration.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(login.status_code, status.HTTP_400_BAD_REQUEST)

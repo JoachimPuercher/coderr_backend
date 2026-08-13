@@ -16,7 +16,7 @@ class OrderTests(APITestCase):
         self.customer_token = Token.objects.create(user=self.customer)
 
         self.business = User.objects.create_user(username='biz', password='SicheresPW123')
-        UserProfile.objects.create(user=self.business, type='business_user')
+        UserProfile.objects.create(user=self.business, type='business')
         self.business_token = Token.objects.create(user=self.business)
 
         self.offer = Offer.objects.create(user=self.business, title='Logo Design', description='Nice logos')
@@ -129,3 +129,33 @@ class OrderTests(APITestCase):
         response = self.client.get('/api/order-count/9999/')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_foreign_provider_may_not_change_the_status(self):
+        order = self.make_order()
+        other = User.objects.create_user(username='biz2', password='SicheresPW123')
+        UserProfile.objects.create(user=other, type='business')
+        self.authenticate(Token.objects.create(user=other))
+
+        response = self.client.patch(f'/api/orders/{order.pk}/', {'status': 'completed'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'in_progress')
+
+    def test_count_for_a_customer_id_returns_404(self):
+        self.authenticate(self.customer_token)
+        response = self.client.get(f'/api/order-count/{self.customer.pk}/')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unsupported_methods_do_not_crash(self):
+        order = self.make_order()
+        self.authenticate(self.business_token)
+
+        options = self.client.options(f'/api/orders/{order.pk}/')
+        put = self.client.put(f'/api/orders/{order.pk}/', {'status': 'completed'}, format='json')
+        get = self.client.get(f'/api/orders/{order.pk}/')
+
+        self.assertEqual(options.status_code, status.HTTP_200_OK)
+        self.assertEqual(put.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(get.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -22,7 +22,7 @@ class RetrieveBaseInfos(APIView):
         reviews_count = Review.objects.count()
         # default=0 keeps the average a number while there are no reviews yet
         average_rating = Review.objects.aggregate(Avg("rating", default=0))
-        profile_count = UserProfile.objects.filter(type="business_user").count()
+        profile_count = UserProfile.objects.filter(type="business").count()
         offer_count = Offer.objects.count()
 
         data = {
