@@ -40,7 +40,7 @@ account of each type over the API itself, that also creates the matching profile
 
 ```
 POST /api/registration/
-{ "username": "biz", "email": "biz@mail.de", "password": "…", "repeated_password": "…", "type": "business_user" }
+{ "username": "biz", "email": "biz@mail.de", "password": "…", "repeated_password": "…", "type": "business" }
 { "username": "cust", "email": "cust@mail.de", "password": "…", "repeated_password": "…", "type": "customer" }
 ```
 
@@ -102,6 +102,44 @@ orders_app/           orders and the order counters
 reviews_app/          ratings of business users
 base_info_app/        platform statistics for the landing page
 ```
+
+
+## API
+
+Authentication is token based. Send the token from registration or login as
+`Authorization: Token <key>`.
+
+| Method | Endpoint | Who |
+|---|---|---|
+| POST | `/api/registration/` | everyone |
+| POST | `/api/login/` | everyone |
+| GET, PATCH | `/api/profile/<user_id>/` | read: logged in, write: owner |
+| GET | `/api/profiles/business/` | logged in |
+| GET | `/api/profiles/customer/` | logged in |
+| GET | `/api/offers/` | everyone |
+| POST | `/api/offers/` | business users |
+| GET, PATCH, DELETE | `/api/offers/<id>/` | read: logged in, write: creator |
+| GET | `/api/offerdetails/<id>/` | logged in |
+| GET | `/api/orders/` | logged in, own orders only |
+| POST | `/api/orders/` | customers |
+| PATCH | `/api/orders/<id>/` | the provider of that order |
+| DELETE | `/api/orders/<id>/` | admins |
+| GET | `/api/order-count/<business_user_id>/` | logged in |
+| GET | `/api/completed-order-count/<business_user_id>/` | logged in |
+| GET | `/api/reviews/` | logged in |
+| POST | `/api/reviews/` | customers, once per business user |
+| PATCH, DELETE | `/api/reviews/<id>/` | author |
+| GET | `/api/base-info/` | everyone |
+
+The url of a profile carries the **user** id, not the id of the profile row.
+
+Query parameters:
+
+- offers: `?creator_id=`, `?min_price=`, `?max_delivery_time=`, `?search=`, `?ordering=`, `?page_size=`
+- reviews: `?business_user_id=`, `?reviewer_id=`, `?ordering=`
+
+The offer list is paginated, so it answers with `count`, `next`, `previous` and `results`.
+All other lists return a plain array.
 
 
 ## Tests
