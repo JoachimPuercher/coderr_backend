@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .serializers import RegisterSerializer, LoginSerializer
 
 
+# TESTING JWT AUTH FOR LEARING:
 class RegistrationView(generics.CreateAPIView):
     """Registers a new user and returns the auth token right away."""
 
@@ -16,16 +17,36 @@ class RegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.save()
-        # the client should be logged in after registering, so it gets a token immediately
-        token, create = Token.objects.get_or_create(user=new_user)
         data = {
-            'token': token.key,
             'username': new_user.username,
             'email': new_user.email,
             'user_id': new_user.pk,
         }
 
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+# 100% WORKING - NORMAL TOKEN AUTH.
+# class RegistrationView(generics.CreateAPIView):
+#     """Registers a new user and returns the auth token right away."""
+
+#     permission_classes = [AllowAny]
+#     serializer_class = RegisterSerializer
+
+#     def create(self, request):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         new_user = serializer.save()
+#         # the client should be logged in after registering, so it gets a token immediately
+#         token, create = Token.objects.get_or_create(user=new_user)
+#         data = {
+#             'token': token.key,
+#             'username': new_user.username,
+#             'email': new_user.email,
+#             'user_id': new_user.pk,
+#         }
+
+#         return Response(data, status=status.HTTP_201_CREATED)
 
 
 class LoginView(generics.GenericAPIView):
