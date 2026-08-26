@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import RegisterSerializer, LoginSerializer
 
 
@@ -48,6 +48,36 @@ class RegistrationView(generics.CreateAPIView):
 
 #         return Response(data, status=status.HTTP_201_CREATED)
 
+
+# COOKIE VIEW FÜR JWT, ERWEITERUNG DER STANDARD CLASS VON SIMPLEJWT
+
+class CookieTokenObtainPairView(TokenObtainPairView):
+# Self created class from the simplejwt class.
+    def post(self, request, *args, **kwargs):
+        # Dont return the response, use the response to extract access/refresh token.
+        # return super().post(request, *args, **kwargs)
+        response = super().post(request, *args, **kwargs)
+        access_token = response.data.get("access")
+        refresh_token =response.data.get("refresh")
+
+        # Set cookie direkt on response access/token.
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax"
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax"
+        )
+        # Update response.data that no access/refresh token is in the response.
+        response.data = {"message" : "Login was successful."}
+        return response
 
 class LoginView(generics.GenericAPIView):
     """Exchanges username and password for an auth token."""
