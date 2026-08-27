@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, CustomTokenObtainPairSerializer
 
 
 # TESTING JWT AUTH FOR LEARING:
@@ -54,6 +54,8 @@ class RegistrationView(generics.CreateAPIView):
 
 class CookieTokenObtainPairView(TokenObtainPairView):
 # Self created class from the simplejwt class.
+    serializer_class = CustomTokenObtainPairSerializer
+
     def post(self, request, *args, **kwargs):
 
         # Get own serializer
@@ -64,8 +66,8 @@ class CookieTokenObtainPairView(TokenObtainPairView):
 
         # Dont return the response, use the response to extract access/refresh token.
         # Get data for tokens from the custom serializer defined
-        access_token = serializer.validated_data("access")
-        refresh_token = serializer.validated_data("refresh")
+        access_token = serializer.validated_data["access"]
+        refresh_token = serializer.validated_data["refresh"]
 
         # Build response
         response = Response({"message" : "Login successfull"})
