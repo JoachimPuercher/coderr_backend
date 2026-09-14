@@ -16,6 +16,8 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     # the url carries the id of the USER, not of the profile row
     lookup_field = "user_id"
     lookup_url_kwarg = "pk"
+    # the spec only allows partial updates, so PUT answers 405 instead of 200
+    http_method_names = ["get", "patch", "options"]
 
 
 class BusinessProfileView(generics.ListAPIView):
