@@ -154,6 +154,20 @@ python manage.py test orders_app.tests.test_orders.OrderTests.test_customer_can_
 Add `-v 2` for single test names and `--failfast` to stop at the first error.
 
 
+## Docker
+
+The image runs the development server, so it is meant for trying the API out, not for
+production. `.env` is not copied into the image — pass it at start:
+
+```powershell
+docker build --tag coderr-backend .
+docker run --publish 8000:8000 --env-file .env coderr-backend
+```
+
+The container starts with an empty SQLite database; run `migrate` and register users
+as described above.
+
+
 ## Debugging
 
 Run the debugger through `manage.py`, never on a single file — otherwise
@@ -162,5 +176,28 @@ Run the debugger through `manage.py`, never on a single file — otherwise
 
 ## About
 
-Apprenticeship project for the Developer Akademie. The frontend is a separate
+Apprenticeship project for the Back-End program of the Developer Akademie. The task was
+to implement a given API specification for the Coderr frontend, which is a separate
 repository and consumes this API.
+
+### What this project covers
+
+Technologies: Python, Django, Django REST Framework, Django ORM with SQLite,
+django-filter, django-cors-headers, DRF token authentication, Pillow, python-dotenv,
+the Django test framework, Docker and Git.
+
+Concepts:
+
+- REST API design against a specification: HTTP methods, status codes, response shapes
+- Token authentication with registration and login
+- Role based access (business / customer) and object level permissions (owner, provider, staff)
+- ModelSerializer and nested serializers with nested create and update
+- Custom validation in serializers and protection against mass assignment
+- Generic views and mixins, querysets restricted to the requesting user
+- Query annotation and aggregation (Min, Avg, Count)
+- Filtering, searching, ordering and pagination
+- Data modelling with foreign keys, choices, unique constraints and migrations
+- Password hashing, configuration through environment variables, CORS
+- Media uploads
+- API integration tests for the happy path and the 400/401/403/404 cases
+- Containerisation with Docker, Conventional Commits
