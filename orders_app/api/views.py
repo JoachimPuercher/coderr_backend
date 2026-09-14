@@ -2,6 +2,7 @@ from django.db.models import Q
 from rest_framework import generics, mixins, status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 
 from auth_app.models import UserProfile
@@ -9,12 +10,14 @@ from orders_app.models import Order
 
 from .permissions import IsCustomer, IsBusinessUser, IsOrderProvider
 from .serializers import OrderRetrieveWriteSerializer, OrderUpdateSerializer
+from .throttles import OrderCreateRateThrottle, OrderUpdateRateThrottle
 
 
 class OrderListCreateView(generics.ListCreateAPIView):
     """Orders of the logged in user, on either side of the deal. Only customers may order."""
 
     serializer_class = OrderRetrieveWriteSerializer
+    throttle_classes = [UserRateThrottle, OrderCreateRateThrottle]
 
     def get_queryset(self):
         # everyone sees only their own orders, as customer or as provider
@@ -39,6 +42,7 @@ class OrderSingleUpdateDestroyView(
     lookup_url_kwarg = "id"
     serializer_class = OrderUpdateSerializer
     queryset = Order.objects.all()
+    throttle_classes = [UserRateThrottle, OrderUpdateRateThrottle]
 
     # the mixins bring update() and destroy(), the mapping to the verbs is ours
     def patch(self, request, *args, **kwargs):

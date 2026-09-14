@@ -8,6 +8,8 @@ from auth_app.models import UserProfile
 from offers_app.models import Offer
 from reviews_app.models import Review
 
+from .throttles import BaseInfoRateThrottle
+
 
 class RetrieveBaseInfos(APIView):
     """Platform figures for the landing page.
@@ -17,6 +19,7 @@ class RetrieveBaseInfos(APIView):
     """
 
     permission_classes = [AllowAny]
+    throttle_classes = [BaseInfoRateThrottle]
 
     def get(self, request, *args, **kwargs):
         reviews_count = Review.objects.count()

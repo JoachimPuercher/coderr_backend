@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import AllowAny, SAFE_METHODS, IsAuthenticated
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from offers_app.models import Offer, OfferDetail
 
@@ -15,6 +16,7 @@ from .serializers import (
     OfferRetrieveSerializer,
     OfferDetailSerializer,
 )
+from .throttles import OfferCreateRateThrottle, OfferUpdateRateThrottle
 
 
 class OfferListCreateView(generics.ListCreateAPIView):
@@ -31,6 +33,7 @@ class OfferListCreateView(generics.ListCreateAPIView):
     search_fields = ["title", "description"]
     ordering_fields = ["updated_at", "min_price"]
     pagination_class = OfferPagination
+    throttle_classes = [AnonRateThrottle, UserRateThrottle, OfferCreateRateThrottle]
 
     def perform_create(self, serializer):
         # the creator comes from the token, never from the payload
@@ -66,6 +69,7 @@ class OfferSingleView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = "id"
     # the parent class would also offer PUT, which the API does not support
     http_method_names = ["get", "patch", "delete", "options"]
+    throttle_classes = [UserRateThrottle, OfferUpdateRateThrottle]
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:

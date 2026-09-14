@@ -2,6 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import UserRateThrottle
 
 from orders_app.api.permissions import IsCustomer
 from reviews_app.models import Review
@@ -9,6 +10,7 @@ from reviews_app.models import Review
 from .filters import ReviewFilter
 from .permissions import IsReviewOwner
 from .serializers import ReviewSerializer, ReviewUpdateSerializer
+from .throttles import ReviewCreateRateThrottle, ReviewUpdateRateThrottle
 
 
 class ReviewListCreateView(generics.ListCreateAPIView):
@@ -19,6 +21,7 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     filterset_class = ReviewFilter
     ordering_fields = ["updated_at", "rating"]
+    throttle_classes = [UserRateThrottle, ReviewCreateRateThrottle]
 
     def perform_create(self, serializer):
         # the author comes from the token, the payload must not decide who reviews
@@ -42,6 +45,7 @@ class ReviewUpdateDestroyView(
     serializer_class = ReviewUpdateSerializer
     queryset = Review.objects.all()
     permission_classes = [IsAuthenticated, IsReviewOwner]
+    throttle_classes = [UserRateThrottle, ReviewUpdateRateThrottle]
 
     # the mixins bring update() and destroy(), the mapping to the verbs is ours
     def patch(self, request, *args, **kwargs):

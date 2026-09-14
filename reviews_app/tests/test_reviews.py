@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,8 @@ from reviews_app.models import Review
 class ReviewTests(APITestCase):
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')
         self.customer_token = Token.objects.create(user=self.customer)

@@ -142,7 +142,28 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
-    ]
+    ],
+    # every view gets these two unless it sets its own; anonymous callers are counted per IP,
+    # logged in ones per user
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    # the app specific scopes are defined in <app>/api/throttles.py, their rates live here
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '60/minute',
+        'user': '240/minute',
+        'registration': '5/hour',
+        'login': '5/minute',
+        'profile_update': '30/hour',
+        'offer_create': '10/hour',
+        'offer_update': '60/hour',
+        'order_create': '30/hour',
+        'order_update': '60/hour',
+        'review_create': '10/hour',
+        'review_update': '30/hour',
+        'base_info': '30/minute',
+    },
 }
 
 # Only these origins may call the API from a browser. Comma separated in the .env,

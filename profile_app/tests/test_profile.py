@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -9,6 +10,8 @@ from auth_app.models import UserProfile
 class ProfileDetailTests(APITestCase):
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         self.owner = User.objects.create_user(
             username='owner',
             email='owner@mail.de',
@@ -96,6 +99,8 @@ class ProfileLookupTests(APITestCase):
     """The url of a profile carries the user id, not the id of the profile row."""
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         # a user without a profile pushes the two id sequences apart
         User.objects.create_user(username='no_profile', password='SicheresPW123')
 
@@ -124,6 +129,8 @@ class ProfileListTests(APITestCase):
     """Both list endpoints live under the documented plural path."""
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         self.business = User.objects.create_user(username='biz', password='SicheresPW123')
         UserProfile.objects.create(user=self.business, type='business')
 

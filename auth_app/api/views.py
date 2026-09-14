@@ -3,6 +3,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, LoginSerializer
+from .throttles import RegistrationRateThrottle, LoginRateThrottle
 
 
 class RegistrationView(generics.CreateAPIView):
@@ -10,6 +11,7 @@ class RegistrationView(generics.CreateAPIView):
 
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
+    throttle_classes = [RegistrationRateThrottle]
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -32,6 +34,7 @@ class LoginView(generics.GenericAPIView):
 
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
+    throttle_classes = [LoginRateThrottle]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)

@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
@@ -9,6 +10,8 @@ from auth_app.models import UserProfile
 class RegistrationTests(APITestCase):
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         self.url = reverse('registration')
         self.data = {
             'username': 'testuser',
@@ -87,6 +90,8 @@ class RegistrationTests(APITestCase):
 class LoginTests(APITestCase):
 
     def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
         self.url = reverse('login')
         self.password = 'SicheresPW123'
         self.user = User.objects.create_user(
@@ -164,6 +169,10 @@ class LoginTests(APITestCase):
 
 class DocumentedUrlTests(APITestCase):
     """The paths from the API documentation have to exist exactly as written."""
+
+    def setUp(self):
+        # throttle counters live in the cache and would carry over from the previous test
+        cache.clear()
 
     def test_registration_and_login_answer_under_their_documented_path(self):
         registration = self.client.post('/api/registration/', {}, format='json')
