@@ -8,7 +8,8 @@ class UserTypeChoices(models.TextChoices):
 
 
 class UserProfile(models.Model):
-    """Coderr specific data next to Django's User, plus the role of the account.
+    """Coderr specific data next to Django's
+    User, plus the role of the account.
 
     Both roles share one model; `type` decides which fields the frontend shows.
     """

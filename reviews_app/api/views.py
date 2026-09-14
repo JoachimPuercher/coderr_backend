@@ -24,13 +24,15 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     throttle_classes = [UserRateThrottle, ReviewCreateRateThrottle]
 
     def perform_create(self, serializer):
-        # the author comes from the token, the payload must not decide who reviews
+        # the author comes from the token, the
+        # payload must not decide who reviews
         serializer.save(reviewer=self.request.user)
 
     def get_permissions(self):
         if self.request.method == "POST":
             return [IsAuthenticated(), IsCustomer()]
-        # covers the safe methods and every verb without a handler, which then ends in 405
+        # covers the safe methods and every verb
+        # without a handler, which then ends in 405
         return [IsAuthenticated()]
 
 

@@ -10,7 +10,8 @@ from auth_app.models import UserProfile
 class RegistrationTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
         self.url = reverse('registration')
         self.data = {
@@ -35,7 +36,8 @@ class RegistrationTests(APITestCase):
         self.assertEqual(response.data['username'], 'testuser')
         self.assertEqual(response.data['email'], 'test@mail.de')
         self.assertEqual(response.data['user_id'], user.pk)
-        self.assertEqual(response.data['token'], Token.objects.get(user=user).key)
+        self.assertEqual(
+            response.data['token'], Token.objects.get(user=user).key)
 
     def test_registration_creates_profile_with_type(self):
         self.client.post(self.url, self.data, format='json')
@@ -66,14 +68,20 @@ class RegistrationTests(APITestCase):
         self.assertIn('username', response.data)
 
     def test_email_already_taken(self):
-        User.objects.create_user(username='andereruser', email='test@mail.de', password='irgendwas')
+        User.objects.create_user(
+            username='andereruser',
+            email='test@mail.de',
+            password='irgendwas')
         response = self.client.post(self.url, self.data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('email', response.data)
 
     def test_email_comparison_ignores_case(self):
-        User.objects.create_user(username='andereruser', email='test@mail.de', password='irgendwas')
+        User.objects.create_user(
+            username='andereruser',
+            email='test@mail.de',
+            password='irgendwas')
         data = {**self.data, 'email': 'TEST@MAIL.DE'}
         response = self.client.post(self.url, data, format='json')
 
@@ -90,7 +98,8 @@ class RegistrationTests(APITestCase):
 class LoginTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
         self.url = reverse('login')
         self.password = 'SicheresPW123'
@@ -111,7 +120,8 @@ class LoginTests(APITestCase):
         self.assertEqual(response.data['username'], 'testuser')
         self.assertEqual(response.data['email'], 'test@mail.de')
         self.assertEqual(response.data['user_id'], self.user.pk)
-        self.assertEqual(response.data['token'], Token.objects.get(user=self.user).key)
+        self.assertEqual(
+            response.data['token'], Token.objects.get(user=self.user).key)
 
     def test_login_reuses_existing_token(self):
         existing = Token.objects.create(user=self.user)
@@ -155,29 +165,35 @@ class LoginTests(APITestCase):
         self.assertEqual(wrong_password.data, wrong_username.data)
 
     def test_login_without_password(self):
-        response = self.client.post(self.url, {'username': 'testuser'}, format='json')
+        response = self.client.post(
+            self.url, {'username': 'testuser'}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('password', response.data)
 
     def test_login_without_username(self):
-        response = self.client.post(self.url, {'password': self.password}, format='json')
+        response = self.client.post(
+            self.url, {'password': self.password}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('username', response.data)
 
 
 class DocumentedUrlTests(APITestCase):
-    """The paths from the API documentation have to exist exactly as written."""
+    """The paths from the API documentation have to exist exactly as written.
+    """
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
 
     def test_registration_and_login_answer_under_their_documented_path(self):
-        registration = self.client.post('/api/registration/', {}, format='json')
+        registration = self.client.post(
+            '/api/registration/', {}, format='json')
         login = self.client.post('/api/login/', {}, format='json')
 
-        # 400 because the body is empty; a 404 would mean the route does not exist
+        # 400 because the body is empty; a 404
+        # would mean the route does not exist
         self.assertEqual(registration.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(login.status_code, status.HTTP_400_BAD_REQUEST)

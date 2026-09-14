@@ -5,7 +5,9 @@ from ..models import UserTypeChoices, UserProfile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    """Creates a User together with its UserProfile from a single registration payload."""
+    """Creates a User together with its UserProfile
+    from a single registration payload.
+    """
 
     repeated_password = serializers.CharField(max_length=100, write_only=True)
     type = serializers.ChoiceField(choices=UserTypeChoices.choices)
@@ -23,7 +25,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=self.validated_data['username'],
             email=self.validated_data['email'],
         )
-        # set_password hashes the value, a plain assignment would store it in clear text
+        # set_password hashes the value, a plain
+        # assignment would store it in clear text
         user.set_password(self.validated_data['password'])
         user.save()
 
@@ -65,11 +68,13 @@ class LoginSerializer(serializers.Serializer):
             pw_valid = user.check_password(values['password'])
 
             if pw_valid:
-                # the view needs the instance, so it travels on in validated_data
+                # the view needs the instance, so
+                # it travels on in validated_data
                 values['user'] = user
                 return values
             else:
-                # same message for both cases, otherwise it would leak existing usernames
+                # same message for both cases, otherwise
+                # it would leak existing usernames
                 raise serializers.ValidationError('Invalid Credentials')
         else:
             raise serializers.ValidationError('Invalid Credentials')

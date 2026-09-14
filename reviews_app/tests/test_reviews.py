@@ -11,21 +11,29 @@ from reviews_app.models import Review
 class ReviewTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
-        self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
+        self.customer = User.objects.create_user(
+            username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')
         self.customer_token = Token.objects.create(user=self.customer)
 
-        self.other_customer = User.objects.create_user(username='cust2', password='SicheresPW123')
+        self.other_customer = User.objects.create_user(
+            username='cust2', password='SicheresPW123')
         UserProfile.objects.create(user=self.other_customer, type='customer')
-        self.other_customer_token = Token.objects.create(user=self.other_customer)
+        self.other_customer_token = Token.objects.create(
+            user=self.other_customer)
 
-        self.business = User.objects.create_user(username='biz', password='SicheresPW123')
+        self.business = User.objects.create_user(
+            username='biz', password='SicheresPW123')
         UserProfile.objects.create(user=self.business, type='business')
 
         self.url = '/api/reviews/'
-        self.payload = {'business_user': self.business.pk, 'rating': 4, 'description': 'Solid work.'}
+        self.payload = {
+            'business_user': self.business.pk,
+            'rating': 4,
+            'description': 'Solid work.'}
 
     def authenticate(self, token):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
@@ -51,31 +59,46 @@ class ReviewTests(APITestCase):
         self.assertEqual(Review.objects.count(), 1)
 
     def test_list_can_be_filtered_by_business_user(self):
-        Review.objects.create(business_user=self.business, reviewer=self.customer, rating=4)
+        Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
         self.authenticate(self.customer_token)
 
-        hit = self.client.get(f'{self.url}?business_user_id={self.business.pk}')
-        miss = self.client.get(f'{self.url}?business_user_id={self.customer.pk}')
+        hit = self.client.get(
+            f'{self.url}?business_user_id={self.business.pk}')
+        miss = self.client.get(
+            f'{self.url}?business_user_id={self.customer.pk}')
 
         self.assertEqual(len(hit.data), 1)
         self.assertEqual(len(miss.data), 0)
 
     def test_author_can_change_the_rating(self):
-        review = Review.objects.create(business_user=self.business, reviewer=self.customer, rating=4)
+        review = Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
         self.authenticate(self.customer_token)
-        response = self.client.patch(f'{self.url}{review.pk}/', {'rating': 5}, format='json')
+        response = self.client.patch(
+            f'{self.url}{review.pk}/', {'rating': 5}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         review.refresh_from_db()
         self.assertEqual(review.rating, 5)
 
     def test_foreign_user_may_not_change_or_delete_the_review(self):
-        review = Review.objects.create(business_user=self.business, reviewer=self.customer, rating=4)
+        review = Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
         self.authenticate(self.other_customer_token)
 
-        patch_response = self.client.patch(f'{self.url}{review.pk}/', {'rating': 1}, format='json')
+        patch_response = self.client.patch(
+            f'{self.url}{review.pk}/', {'rating': 1}, format='json')
         delete_response = self.client.delete(f'{self.url}{review.pk}/')
 
         self.assertEqual(patch_response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(delete_response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            delete_response.status_code,
+            status.HTTP_403_FORBIDDEN)
         self.assertEqual(Review.objects.count(), 1)

@@ -8,7 +8,10 @@ class OfferDetailSerializer(serializers.ModelSerializer):
     """A single package (basic, standard, premium) of an offer."""
 
     # coerce_to_string=False keeps the price a JSON number instead of "100.00"
-    price = serializers.DecimalField(decimal_places=2, coerce_to_string=False, max_digits=10)
+    price = serializers.DecimalField(
+        decimal_places=2,
+        coerce_to_string=False,
+        max_digits=10)
 
     class Meta:
         model = OfferDetail
@@ -51,13 +54,16 @@ class OfferWriteSerializer(serializers.ModelSerializer):
 
         if details_data is not None:
             for detail_data in details_data:
-                # details carry no id in the payload, so offer_type is the only way to find them
+                # details carry no id in the payload, so
+                # offer_type is the only way to find them
                 offer_type = detail_data.get("offer_type")
                 if not offer_type:
-                    raise serializers.ValidationError("Every detail must contain an offer_type.")
+                    raise serializers.ValidationError(
+                        "Every detail must contain an offer_type.")
                 detail = instance.details.filter(offer_type=offer_type).first()
                 if detail is None:
-                    raise serializers.ValidationError(f"There is no detail with offer_type {offer_type}.")
+                    raise serializers.ValidationError(
+                        f"There is no detail with offer_type {offer_type}.")
                 for attr, value in detail_data.items():
                     setattr(detail, attr, value)
                 detail.save()
@@ -72,20 +78,27 @@ class OfferWriteSerializer(serializers.ModelSerializer):
             detail_choices.append(i["offer_type"])
 
         if len(details_data) == 3:
-            if detail_choices[0] != detail_choices[1] != detail_choices[2] != detail_choices[0]:
+            if (
+                detail_choices[0] != detail_choices[1]
+                != detail_choices[2] != detail_choices[0]
+            ):
                 offer = Offer.objects.create(**validated_data)
                 for detail in details_data:
                     OfferDetail.objects.create(offer=offer, **detail)
                 return offer
             else:
-                raise serializers.ValidationError("There musst be exact three different details.")
+                raise serializers.ValidationError(
+                    "There musst be exact three different details.")
         else:
-            raise serializers.ValidationError("Missing details, there musst be exact three details.")
+            raise serializers.ValidationError(
+                "Missing details, there musst be exact three details.")
+
 
 class OfferDetailLinkSerializer(serializers.ModelSerializer):
     """Shrinks a detail to id plus link, which is what the offer list shows."""
 
-    url = serializers.HyperlinkedIdentityField(view_name="offerdetails", lookup_url_kwarg="id")
+    url = serializers.HyperlinkedIdentityField(
+        view_name="offerdetails", lookup_url_kwarg="id")
 
     class Meta:
         model = OfferDetail
@@ -105,7 +118,8 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
 
     user = serializers.IntegerField(source="user_id", read_only=True)
     details = OfferDetailLinkSerializer(many=True)
-    # both values are annotated on the queryset in the view, not stored on the model
+    # both values are annotated on the queryset
+    # in the view, not stored on the model
     min_price = serializers.FloatField(read_only=True)
     min_delivery_time = serializers.IntegerField(read_only=True)
 

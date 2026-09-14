@@ -5,9 +5,12 @@ class IsBusinessUser(BasePermission):
     """Only accounts with a business profile may create offers."""
 
     def has_permission(self, request, view):
-        self.message = "You are not allowed, only business user can create offers."
+        self.message = (
+            "You are not allowed, only business user can create offers."
+        )
 
-        # getattr with a default also covers AnonymousUser and users without a profile
+        # getattr with a default also covers
+        # AnonymousUser and users without a profile
         profile = getattr(request.user, 'userprofile', None)
         if profile is not None and profile.type == 'business':
             return True

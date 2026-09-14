@@ -11,18 +11,27 @@ from reviews_app.models import Review
 class BaseInfoTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
         self.url = '/api/base-info/'
 
-        self.business = User.objects.create_user(username='biz', password='SicheresPW123')
+        self.business = User.objects.create_user(
+            username='biz', password='SicheresPW123')
         UserProfile.objects.create(user=self.business, type='business')
 
-        self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
+        self.customer = User.objects.create_user(
+            username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')
 
-        Offer.objects.create(user=self.business, title='Logo Design', description='Nice logos')
-        Review.objects.create(business_user=self.business, reviewer=self.customer, rating=4)
+        Offer.objects.create(
+            user=self.business,
+            title='Logo Design',
+            description='Nice logos')
+        Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
 
     def test_endpoint_is_public_and_counts_match_the_database(self):
         response = self.client.get(self.url)

@@ -10,7 +10,8 @@ from auth_app.models import UserProfile
 class ProfileDetailTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
         self.owner = User.objects.create_user(
             username='owner',
@@ -27,7 +28,8 @@ class ProfileDetailTests(APITestCase):
         )
         self.owner_token = Token.objects.create(user=self.owner)
 
-        self.other = User.objects.create_user(username='other', password='SicheresPW123')
+        self.other = User.objects.create_user(
+            username='other', password='SicheresPW123')
         self.other_token = Token.objects.create(user=self.other)
 
         # the url carries the user id, which is not necessarily the profile id
@@ -50,7 +52,11 @@ class ProfileDetailTests(APITestCase):
         self.authenticate(self.owner_token)
         response = self.client.patch(
             self.url,
-            {'first_name': 'Erika', 'email': 'erika@mail.de', 'location': 'Hamburg'},
+            {
+                'first_name': 'Erika',
+                'email': 'erika@mail.de',
+                'location': 'Hamburg',
+            },
             format='json',
         )
 
@@ -63,7 +69,8 @@ class ProfileDetailTests(APITestCase):
 
     def test_update_of_a_single_field_keeps_the_rest_untouched(self):
         self.authenticate(self.owner_token)
-        response = self.client.patch(self.url, {'location': 'Hamburg'}, format='json')
+        response = self.client.patch(
+            self.url, {'location': 'Hamburg'}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.owner.refresh_from_db()
@@ -73,15 +80,21 @@ class ProfileDetailTests(APITestCase):
 
     def test_unauthenticated_request_is_rejected(self):
         get_response = self.client.get(self.url)
-        patch_response = self.client.patch(self.url, {'location': 'Hamburg'}, format='json')
+        patch_response = self.client.patch(
+            self.url, {'location': 'Hamburg'}, format='json')
 
-        self.assertEqual(get_response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(patch_response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(
+            get_response.status_code,
+            status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(
+            patch_response.status_code,
+            status.HTTP_401_UNAUTHORIZED)
 
     def test_foreign_user_may_read_but_not_change(self):
         self.authenticate(self.other_token)
         get_response = self.client.get(self.url)
-        patch_response = self.client.patch(self.url, {'location': 'Hamburg'}, format='json')
+        patch_response = self.client.patch(
+            self.url, {'location': 'Hamburg'}, format='json')
 
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
         self.assertEqual(patch_response.status_code, status.HTTP_403_FORBIDDEN)
@@ -96,16 +109,22 @@ class ProfileDetailTests(APITestCase):
 
 
 class ProfileLookupTests(APITestCase):
-    """The url of a profile carries the user id, not the id of the profile row."""
+    """The url of a profile carries the user id, not the id of the profile row.
+    """
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
         # a user without a profile pushes the two id sequences apart
-        User.objects.create_user(username='no_profile', password='SicheresPW123')
+        User.objects.create_user(
+            username='no_profile',
+            password='SicheresPW123')
 
-        self.user = User.objects.create_user(username='owner', password='SicheresPW123')
-        self.profile = UserProfile.objects.create(user=self.user, type='business')
+        self.user = User.objects.create_user(
+            username='owner', password='SicheresPW123')
+        self.profile = UserProfile.objects.create(
+            user=self.user, type='business')
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
 
@@ -129,12 +148,15 @@ class ProfileListTests(APITestCase):
     """Both list endpoints live under the documented plural path."""
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
-        self.business = User.objects.create_user(username='biz', password='SicheresPW123')
+        self.business = User.objects.create_user(
+            username='biz', password='SicheresPW123')
         UserProfile.objects.create(user=self.business, type='business')
 
-        self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
+        self.customer = User.objects.create_user(
+            username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')
 
         token = Token.objects.create(user=self.customer)

@@ -6,7 +6,9 @@ from orders_app.models import Order, OrderTypeChoices
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    """Read side of an order. Everything is read-only, the children open up single fields."""
+    """Read side of an order. Everything is
+    read-only, the children open up single fields.
+    """
 
     price = serializers.DecimalField(
         max_digits=10,
@@ -47,11 +49,14 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        """Build the order from the chosen offer detail; the client only sends its id."""
+        """Build the order from the chosen offer
+        detail; the client only sends its id.
+        """
         new_offer_id = validated_data["offer_detail_id"]
         new_offer_user_id = self.context["request"].user.id
         offer = get_object_or_404(OfferDetail, pk=new_offer_id)
-        # the conditions are copied, not linked, so a later price change leaves the order untouched
+        # the conditions are copied, not linked, so a
+        # later price change leaves the order untouched
         order = Order.objects.create(
             customer_user_id=new_offer_user_id,
             business_user_id=offer.offer.user_id,
@@ -87,12 +92,14 @@ class OrderUpdateSerializer(OrderSerializer):
 
     def validate(self, attrs):
         """Answer unknown keys with a 400 instead of dropping them silently."""
-        # DRF only walks its own fields, so extra keys are invisible after this point
+        # DRF only walks its own fields, so extra
+        # keys are invisible after this point
         sent = set(self.initial_data)
         allowed = set(attrs)
         too_much = sent - allowed
 
         if too_much:
-            raise serializers.ValidationError(f"Not allowed. {', '.join(too_much)}")
+            raise serializers.ValidationError(
+                f"Not allowed. {', '.join(too_much)}")
         else:
             return attrs

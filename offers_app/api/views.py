@@ -20,10 +20,13 @@ from .throttles import OfferCreateRateThrottle, OfferUpdateRateThrottle
 
 
 class OfferListCreateView(generics.ListCreateAPIView):
-    """Public offer list with search, filters and paging; only business users may post."""
+    """Public offer list with search, filters
+    and paging; only business users may post.
+    """
 
-    # the two minimums are computed by the database so they stay filterable and sortable;
-    # the order_by keeps pagination stable, otherwise rows may repeat across pages
+    # the two minimums are computed by the database so they
+    # stay filterable and sortable; the order_by keeps
+    # pagination stable, otherwise rows may repeat across pages
     queryset = Offer.objects.annotate(
         min_price=Min("details__price"),
         min_delivery_time=Min("details__delivery_time_in_days"),
@@ -33,7 +36,11 @@ class OfferListCreateView(generics.ListCreateAPIView):
     search_fields = ["title", "description"]
     ordering_fields = ["updated_at", "min_price"]
     pagination_class = OfferPagination
-    throttle_classes = [AnonRateThrottle, UserRateThrottle, OfferCreateRateThrottle]
+    throttle_classes = [
+        AnonRateThrottle,
+        UserRateThrottle,
+        OfferCreateRateThrottle,
+    ]
 
     def perform_create(self, serializer):
         # the creator comes from the token, never from the payload
@@ -80,5 +87,6 @@ class OfferSingleView(generics.RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         if self.request.method in ("PATCH", "DELETE"):
             return [IsAuthenticated(), IsOfferCreator()]
-        # covers the safe methods and every verb without a handler, which then ends in 405
+        # covers the safe methods and every verb
+        # without a handler, which then ends in 405
         return [IsAuthenticated()]

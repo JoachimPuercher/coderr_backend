@@ -17,7 +17,8 @@ class RegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.save()
-        # the client should be logged in after registering, so it gets a token immediately
+        # the client should be logged in after
+        # registering, so it gets a token immediately
         token, create = Token.objects.get_or_create(user=new_user)
         data = {
             'token': token.key,
@@ -39,7 +40,8 @@ class LoginView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # the serializer already verified the password and put the user in validated_data
+        # the serializer already verified the
+        # password and put the user in validated_data
         login_user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=login_user)
         data = {

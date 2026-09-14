@@ -22,13 +22,18 @@ load_dotenv(BASE_DIR / '.env')
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# no fallback on purpose: a missing key should stop the server, not run with a default
+# no fallback on purpose: a missing key should
+# stop the server, not run with a default
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv('ALLOWED_HOSTS', '').split(',')
+    if host.strip()
+]
 
 
 # Application definition
@@ -100,16 +105,28 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
@@ -143,13 +160,14 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-    # every view gets these two unless it sets its own; anonymous callers are counted per IP,
-    # logged in ones per user
+    # every view gets these two unless it sets its own; anonymous
+    # callers are counted per IP, logged in ones per user
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ],
-    # the app specific scopes are defined in <app>/api/throttles.py, their rates live here
+    # the app specific scopes are defined in
+    # <app>/api/throttles.py, their rates live here
     'DEFAULT_THROTTLE_RATES': {
         'anon': '60/minute',
         'user': '240/minute',
@@ -166,11 +184,14 @@ REST_FRAMEWORK = {
     },
 }
 
-# Only these origins may call the API from a browser. Comma separated in the .env,
-# with scheme and port, e.g. http://127.0.0.1:5500
+# Only these origins may call the API from a browser. Comma separated
+# in the .env, with scheme and port, e.g. http://127.0.0.1:5500
 CORS_ALLOWED_ORIGINS = [
-    origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if origin.strip()
+    origin.strip()
+    for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+    if origin.strip()
 ]
 
-# the frontend sends the token in a header, not as a cookie, so credentials stay off
+# the frontend sends the token in a header,
+# not as a cookie, so credentials stay off
 CORS_ALLOW_CREDENTIALS = False

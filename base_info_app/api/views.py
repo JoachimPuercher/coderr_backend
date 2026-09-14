@@ -14,8 +14,8 @@ from .throttles import BaseInfoRateThrottle
 class RetrieveBaseInfos(APIView):
     """Platform figures for the landing page.
 
-    No serializer here: the answer is an evaluation, not a resource, so the dict is
-    assembled by hand.
+    No serializer here: the answer is an evaluation,
+    not a resource, so the dict is assembled by hand.
     """
 
     permission_classes = [AllowAny]

@@ -19,24 +19,32 @@ def build_details():
             'features': ['something'],
             'offer_type': offer_type,
         }
-        for offer_type, price in [('basic', 100), ('standard', 200), ('premium', 300)]
+        for offer_type, price in [
+            ('basic', 100), ('standard', 200), ('premium', 300),
+        ]
     ]
 
 
 class OfferTests(APITestCase):
 
     def setUp(self):
-        # throttle counters live in the cache and would carry over from the previous test
+        # throttle counters live in the cache and
+        # would carry over from the previous test
         cache.clear()
-        self.business = User.objects.create_user(username='biz', password='SicheresPW123')
+        self.business = User.objects.create_user(
+            username='biz', password='SicheresPW123')
         UserProfile.objects.create(user=self.business, type='business')
         self.business_token = Token.objects.create(user=self.business)
 
-        self.customer = User.objects.create_user(username='cust', password='SicheresPW123')
+        self.customer = User.objects.create_user(
+            username='cust', password='SicheresPW123')
         UserProfile.objects.create(user=self.customer, type='customer')
         self.customer_token = Token.objects.create(user=self.customer)
 
-        self.offer = Offer.objects.create(user=self.business, title='Logo Design', description='Nice logos')
+        self.offer = Offer.objects.create(
+            user=self.business,
+            title='Logo Design',
+            description='Nice logos')
         for detail in build_details():
             OfferDetail.objects.create(offer=self.offer, **detail)
 
@@ -57,7 +65,11 @@ class OfferTests(APITestCase):
         self.authenticate(self.business_token)
         response = self.client.post(
             self.url,
-            {'title': 'New offer', 'description': 'Text', 'details': build_details()},
+            {
+                'title': 'New offer',
+                'description': 'Text',
+                'details': build_details(),
+            },
             format='json',
         )
         created = Offer.objects.get(title='New offer')
@@ -70,7 +82,11 @@ class OfferTests(APITestCase):
         self.authenticate(self.customer_token)
         response = self.client.post(
             self.url,
-            {'title': 'New offer', 'description': 'Text', 'details': build_details()},
+            {
+                'title': 'New offer',
+                'description': 'Text',
+                'details': build_details(),
+            },
             format='json',
         )
 
@@ -78,7 +94,11 @@ class OfferTests(APITestCase):
 
     def test_only_the_creator_may_change_an_offer(self):
         self.authenticate(self.customer_token)
-        response = self.client.patch(f'/api/offers/{self.offer.pk}/', {'title': 'Hijacked'}, format='json')
+        response = self.client.patch(
+            f'/api/offers/{self.offer.pk}/',
+            {'title': 'Hijacked'},
+            format='json',
+        )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.offer.refresh_from_db()
@@ -88,7 +108,8 @@ class OfferTests(APITestCase):
         self.authenticate(self.business_token)
 
         options = self.client.options(f'/api/offers/{self.offer.pk}/')
-        put = self.client.put(f'/api/offers/{self.offer.pk}/', {'title': 'x'}, format='json')
+        put = self.client.put(
+            f'/api/offers/{self.offer.pk}/', {'title': 'x'}, format='json')
 
         self.assertEqual(options.status_code, status.HTTP_200_OK)
         self.assertEqual(put.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

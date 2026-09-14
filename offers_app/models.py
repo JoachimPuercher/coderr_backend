@@ -11,7 +11,10 @@ class OfferTypeChoices(models.TextChoices):
 class Offer(models.Model):
     """A service a business user offers, split into three packages."""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="offers")
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="offer_images/", blank=True, null=True)
     description = models.TextField()
@@ -22,13 +25,17 @@ class Offer(models.Model):
 class OfferDetail(models.Model):
     """One package of an offer with its own price and scope."""
 
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="details")
+    offer = models.ForeignKey(
+        Offer,
+        on_delete=models.CASCADE,
+        related_name="details")
     title = models.CharField(max_length=255)
     revisions = models.IntegerField()
     delivery_time_in_days = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     features = models.JSONField(default=list, blank=True)
-    offer_type = models.CharField(max_length=20, choices=OfferTypeChoices.choices)
+    offer_type = models.CharField(
+        max_length=20, choices=OfferTypeChoices.choices)
 
     class Meta:
         constraints = [

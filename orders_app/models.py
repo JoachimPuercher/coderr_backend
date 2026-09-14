@@ -13,8 +13,9 @@ class OrderTypeChoices(models.TextChoices):
 class Order(models.Model):
     """A booked offer package.
 
-    The conditions are copied from the OfferDetail instead of being linked, so a later
-    change to the offer does not rewrite orders that were already placed.
+    The conditions are copied from the OfferDetail instead
+    of being linked, so a later change to the offer does
+    not rewrite orders that were already placed.
     """
 
     # SET_NULL keeps the order as a record even after one of the users is gone
