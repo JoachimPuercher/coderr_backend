@@ -9,6 +9,7 @@ from reviews_app.models import Review
 
 
 class ReviewTests(APITestCase):
+    """Writing, filtering and editing reviews, one review per business."""
 
     def setUp(self):
         # throttle counters live in the cache and

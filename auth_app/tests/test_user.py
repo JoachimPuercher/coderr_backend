@@ -8,6 +8,7 @@ from auth_app.models import UserProfile
 
 
 class RegistrationTests(APITestCase):
+    """POST /api/registration/: account, profile and token in one step."""
 
     def setUp(self):
         # throttle counters live in the cache and
@@ -96,6 +97,7 @@ class RegistrationTests(APITestCase):
 
 
 class LoginTests(APITestCase):
+    """POST /api/login/: token for valid credentials, otherwise a 400."""
 
     def setUp(self):
         # throttle counters live in the cache and

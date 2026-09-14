@@ -5,6 +5,7 @@ class IsCustomer(BasePermission):
     """Only accounts with a customer profile pass."""
 
     def has_permission(self, request, view):
+        """Runs for every request, before any object is loaded."""
         self.message = "You are not a customer of coderr."
 
         # getattr with a default also covers
@@ -17,6 +18,7 @@ class IsBusinessUser(BasePermission):
     """Only accounts with a business profile pass."""
 
     def has_permission(self, request, view):
+        """Runs for every request, before any object is loaded."""
         self.message = "You are not a business user of coderr."
 
         profile = getattr(request.user, "userprofile", None)
@@ -27,6 +29,7 @@ class IsOrderProvider(BasePermission):
     """An order may only be changed by the business user it was placed with."""
 
     def has_object_permission(self, request, view, obj):
+        """Runs after get_object(), so a missing order answers 404 first."""
         self.message = "Only the provider of this order can change it."
 
         return obj.business_user == request.user

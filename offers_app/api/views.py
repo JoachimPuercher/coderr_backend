@@ -43,16 +43,19 @@ class OfferListCreateView(generics.ListCreateAPIView):
     ]
 
     def perform_create(self, serializer):
+        """Store the requesting user as creator of the new offer."""
         # the creator comes from the token, never from the payload
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
+        """Reading is public, creating needs a business profile."""
         if self.request.method in SAFE_METHODS:
             return [AllowAny()]
         else:
             return [IsAuthenticated(), IsBusinessUser()]
 
     def get_serializer_class(self):
+        """Write serializer for POST, the compact list shape for reading."""
         if self.request.method == "POST":
             return OfferWriteSerializer
         return OfferListSerializer
@@ -79,12 +82,14 @@ class OfferSingleView(generics.RetrieveUpdateDestroyAPIView):
     throttle_classes = [UserRateThrottle, OfferUpdateRateThrottle]
 
     def get_serializer_class(self):
+        """Details as links for reading, as full objects when writing."""
         if self.request.method in SAFE_METHODS:
             return OfferRetrieveSerializer
 
         return OfferWriteSerializer
 
     def get_permissions(self):
+        """Logged in users may read, only the creator may change or delete."""
         if self.request.method in ("PATCH", "DELETE"):
             return [IsAuthenticated(), IsOfferCreator()]
         # covers the safe methods and every verb

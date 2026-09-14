@@ -3,6 +3,8 @@ from django.db import models
 
 
 class OfferTypeChoices(models.TextChoices):
+    """The three package levels; every offer has exactly one of each."""
+
     BASIC = "basic"
     STANDARD = "standard"
     PREMIUM = "premium"

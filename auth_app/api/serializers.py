@@ -61,6 +61,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, values):
+        """Accept only a known username with the matching password."""
         new_username = values['username']
         user = User.objects.filter(username=new_username).first()
 

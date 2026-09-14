@@ -26,6 +26,7 @@ def build_details():
 
 
 class OfferTests(APITestCase):
+    """Offer list, creation and editing, including the role checks."""
 
     def setUp(self):
         # throttle counters live in the cache and

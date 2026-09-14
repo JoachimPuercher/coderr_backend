@@ -22,6 +22,7 @@ class RetrieveBaseInfos(APIView):
     throttle_classes = [BaseInfoRateThrottle]
 
     def get(self, request, *args, **kwargs):
+        """Collect the figures fresh on every request; nothing is cached."""
         reviews_count = Review.objects.count()
         # default=0 keeps the average a number while there are no reviews yet
         average_rating = Review.objects.aggregate(Avg("rating", default=0))

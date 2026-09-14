@@ -10,6 +10,7 @@ from orders_app.models import Order
 
 
 class OrderTests(APITestCase):
+    """Ordering, status changes, deletion and the two order counters."""
 
     def setUp(self):
         # throttle counters live in the cache and

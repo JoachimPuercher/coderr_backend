@@ -14,6 +14,7 @@ class RegistrationView(generics.CreateAPIView):
     throttle_classes = [RegistrationRateThrottle]
 
     def create(self, request):
+        """Create user and profile, then answer with token and user data."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.save()
@@ -38,6 +39,7 @@ class LoginView(generics.GenericAPIView):
     throttle_classes = [LoginRateThrottle]
 
     def post(self, request):
+        """Return the user's token; it is created on the first login only."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         # the serializer already verified the

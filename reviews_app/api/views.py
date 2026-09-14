@@ -24,11 +24,13 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     throttle_classes = [UserRateThrottle, ReviewCreateRateThrottle]
 
     def perform_create(self, serializer):
+        """Store the requesting user as author of the new review."""
         # the author comes from the token, the
         # payload must not decide who reviews
         serializer.save(reviewer=self.request.user)
 
     def get_permissions(self):
+        """Every logged in user may read, only customers may write."""
         if self.request.method == "POST":
             return [IsAuthenticated(), IsCustomer()]
         # covers the safe methods and every verb
@@ -51,7 +53,9 @@ class ReviewUpdateDestroyView(
 
     # the mixins bring update() and destroy(), the mapping to the verbs is ours
     def patch(self, request, *args, **kwargs):
+        """Edit rating or description, always as a partial update."""
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Delete the review; the permission limits this to its author."""
         return self.destroy(request, *args, **kwargs)

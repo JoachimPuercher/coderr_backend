@@ -8,7 +8,7 @@ class OfferCreateRateThrottle(UserRateThrottle):
     scope = 'offer_create'
 
     def allow_request(self, request, view):
-        # reading is covered by the default limits, only writing counts here
+        """Count only writing requests; reads fall under the default limits."""
         if request.method in SAFE_METHODS:
             return True
         return super().allow_request(request, view)
@@ -20,7 +20,7 @@ class OfferUpdateRateThrottle(UserRateThrottle):
     scope = 'offer_update'
 
     def allow_request(self, request, view):
-        # reading is covered by the default limits, only writing counts here
+        """Count only writing requests; reads fall under the default limits."""
         if request.method in SAFE_METHODS:
             return True
         return super().allow_request(request, view)

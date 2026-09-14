@@ -9,6 +9,7 @@ from reviews_app.models import Review
 
 
 class BaseInfoTests(APITestCase):
+    """GET /api/base-info/: public figures that match the database."""
 
     def setUp(self):
         # throttle counters live in the cache and

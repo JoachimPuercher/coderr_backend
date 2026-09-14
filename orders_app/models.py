@@ -5,6 +5,8 @@ from offers_app.models import OfferTypeChoices
 
 
 class OrderTypeChoices(models.TextChoices):
+    """Lifecycle states of an order, stored in Order.status."""
+
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     CANCELLED = "cancelled"

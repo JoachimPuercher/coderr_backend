@@ -8,6 +8,7 @@ from auth_app.models import UserProfile
 
 
 class ProfileDetailTests(APITestCase):
+    """GET and PATCH on a single profile, including owner checks."""
 
     def setUp(self):
         # throttle counters live in the cache and

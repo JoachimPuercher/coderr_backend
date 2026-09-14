@@ -22,6 +22,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
     throttle_classes = [UserRateThrottle, OrderCreateRateThrottle]
 
     def get_queryset(self):
+        """Limit the list to orders the requesting user takes part in."""
         # everyone sees only their own orders, as customer or as provider
         return Order.objects.filter(
             Q(customer_user=self.request.user)
@@ -29,6 +30,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
         )
 
     def get_permissions(self):
+        """Every logged in user may list, only customers may order."""
         if self.request.method == "POST":
             return [IsAuthenticated(), IsCustomer()]
         # covers the safe methods and every verb
@@ -52,12 +54,15 @@ class OrderSingleUpdateDestroyView(
 
     # the mixins bring update() and destroy(), the mapping to the verbs is ours
     def patch(self, request, *args, **kwargs):
+        """Status change, always as a partial update."""
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """Delete the order; the permission limits this to admins."""
         return self.destroy(request, *args, **kwargs)
 
     def get_permissions(self):
+        """Provider for PATCH, staff for DELETE, login for the rest."""
         if self.request.method == "PATCH":
             return [IsAuthenticated(), IsBusinessUser(), IsOrderProvider()]
         if self.request.method == "DELETE":
@@ -73,6 +78,7 @@ class OrderCountView(APIView):
     """
 
     def get(self, request, *args, **kwargs):
+        """Count the orders of one business user that are still in progress."""
         business_id = kwargs['business_user_id']
         # the id has to belong to a business
         # profile, any other one would count to zero
@@ -96,6 +102,7 @@ class CompletedOrderCountView(APIView):
     """Same as above for finished orders."""
 
     def get(self, request, *args, **kwargs):
+        """Count the finished orders of one business user."""
         business_id = kwargs['business_user_id']
         business_user = UserProfile.objects.filter(
             user_id=business_id, type="business").first()

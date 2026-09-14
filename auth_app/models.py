@@ -3,6 +3,8 @@ from django.db import models
 
 
 class UserTypeChoices(models.TextChoices):
+    """The two roles an account can have; decides what it may do."""
+
     CUSTOMER = "customer"
     BUSINESS = "business"
 
