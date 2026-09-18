@@ -71,6 +71,7 @@ class ReviewTests(APITestCase):
         miss = self.client.get(
             f'{self.url}?business_user_id={self.customer.pk}')
 
+        self.assertEqual(hit.status_code, status.HTTP_200_OK)
         self.assertEqual(len(hit.data), 1)
         self.assertEqual(len(miss.data), 0)
 
@@ -103,3 +104,84 @@ class ReviewTests(APITestCase):
             delete_response.status_code,
             status.HTTP_403_FORBIDDEN)
         self.assertEqual(Review.objects.count(), 1)
+
+    def test_business_user_may_not_write_a_review(self):
+        other_business = User.objects.create_user(
+            username='biz2', password='SicheresPW123')
+        UserProfile.objects.create(user=other_business, type='business')
+        self.authenticate(Token.objects.create(user=other_business))
+        response = self.client.post(self.url, self.payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertFalse(Review.objects.exists())
+
+    def test_rating_has_to_be_between_one_and_five(self):
+        self.authenticate(self.customer_token)
+        too_low = self.client.post(
+            self.url, {**self.payload, 'rating': 0}, format='json')
+        too_high = self.client.post(
+            self.url, {**self.payload, 'rating': 6}, format='json')
+
+        self.assertEqual(too_low.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(too_high.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(Review.objects.exists())
+
+    def test_only_business_users_can_be_reviewed(self):
+        self.authenticate(self.customer_token)
+        response = self.client.post(
+            self.url,
+            {**self.payload, 'business_user': self.other_customer.pk},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('business_user', response.data)
+
+    def test_business_user_of_a_review_cannot_be_changed(self):
+        review = Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
+        self.authenticate(self.customer_token)
+        response = self.client.patch(
+            f'{self.url}{review.pk}/',
+            {'business_user': self.other_customer.pk},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        review.refresh_from_db()
+        self.assertEqual(review.business_user, self.business)
+
+    def test_author_can_delete_the_review(self):
+        review = Review.objects.create(
+            business_user=self.business,
+            reviewer=self.customer,
+            rating=4)
+        self.authenticate(self.customer_token)
+        response = self.client.delete(f'{self.url}{review.pk}/')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Review.objects.exists())
+
+    def test_unknown_review_returns_404(self):
+        self.authenticate(self.customer_token)
+        response = self.client.patch(
+            f'{self.url}9999/', {'rating': 5}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_can_be_filtered_by_reviewer_and_ordered_by_rating(self):
+        Review.objects.create(
+            business_user=self.business, reviewer=self.customer, rating=2)
+        Review.objects.create(
+            business_user=self.business,
+            reviewer=self.other_customer,
+            rating=5)
+        self.authenticate(self.customer_token)
+
+        own = self.client.get(f'{self.url}?reviewer_id={self.customer.pk}')
+        ordered = self.client.get(f'{self.url}?ordering=-rating')
+
+        self.assertEqual([r['rating'] for r in own.data], [2])
+        self.assertEqual([r['rating'] for r in ordered.data], [5, 2])

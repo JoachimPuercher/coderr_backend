@@ -24,6 +24,16 @@ class ReviewSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def validate_business_user(self, value):
+        """Only accounts with a business profile can be reviewed."""
+        # getattr with a default also covers users without a profile
+        profile = getattr(value, "userprofile", None)
+        if profile is None or profile.type != "business":
+            raise serializers.ValidationError(
+                "Only business users can be reviewed.")
+        else:
+            return value
+
     def validate(self, attrs):
         """One review per customer and business user."""
         # the model constraint guards the same
