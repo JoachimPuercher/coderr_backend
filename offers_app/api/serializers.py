@@ -3,6 +3,9 @@ from rest_framework import serializers
 
 from offers_app.models import Offer, OfferDetail
 
+# bigger offer images only cost disk space and loading time in the lists
+MAX_IMAGE_SIZE = 5 * 1024 * 1024
+
 
 class OfferDetailSerializer(serializers.ModelSerializer):
     """A single package (basic, standard, premium) of an offer."""
@@ -43,6 +46,15 @@ class OfferWriteSerializer(serializers.ModelSerializer):
             'details',
         ]
         read_only_fields = ['id']
+
+    def validate_image(self, value):
+        """Reject uploads above MAX_IMAGE_SIZE."""
+        # value is None when the client sends no image or removes it
+        if value and value.size > MAX_IMAGE_SIZE:
+            limit = MAX_IMAGE_SIZE // (1024 * 1024)
+            raise serializers.ValidationError(
+                f"The image may be at most {limit} MB.")
+        return value
 
     def update(self, instance, validated_data):
         """Update the offer and match every sent detail by its offer_type."""
