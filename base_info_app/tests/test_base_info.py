@@ -49,3 +49,14 @@ class BaseInfoTests(APITestCase):
 
         self.assertEqual(response.data['review_count'], 0)
         self.assertEqual(response.data['average_rating'], 0)
+
+    def test_average_rating_is_rounded_to_one_decimal(self):
+        for name, rating in (('cust2', 4), ('cust3', 5)):
+            reviewer = User.objects.create_user(
+                username=name, password='SicheresPW123')
+            Review.objects.create(
+                business_user=self.business, reviewer=reviewer, rating=rating)
+        response = self.client.get(self.url)
+
+        # (4 + 4 + 5) / 3 = 4.333...
+        self.assertEqual(response.data['average_rating'], 4.3)

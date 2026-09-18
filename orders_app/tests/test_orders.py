@@ -178,3 +178,69 @@ class OrderTests(APITestCase):
         self.assertEqual(options.status_code, status.HTTP_200_OK)
         self.assertEqual(put.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(get.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_orders_need_authentication(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_customer_sees_the_own_orders(self):
+        self.make_order()
+        self.authenticate(self.customer_token)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_uninvolved_user_sees_no_foreign_orders(self):
+        self.make_order()
+        stranger = User.objects.create_user(
+            username='cust2', password='SicheresPW123')
+        UserProfile.objects.create(user=stranger, type='customer')
+        self.authenticate(Token.objects.create(user=stranger))
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [])
+
+    def test_order_for_an_unknown_offer_detail_returns_404(self):
+        self.authenticate(self.customer_token)
+        response = self.client.post(
+            self.url, {'offer_detail_id': 9999}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Order.objects.count(), 0)
+
+    def test_order_without_offer_detail_id_is_rejected(self):
+        self.authenticate(self.customer_token)
+        response = self.client.post(self.url, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_status_is_rejected(self):
+        order = self.make_order()
+        self.authenticate(self.business_token)
+        response = self.client.patch(
+            f'/api/orders/{order.pk}/', {'status': 'shipped'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        order.refresh_from_db()
+        self.assertEqual(order.status, 'in_progress')
+
+    def test_customer_may_not_change_the_status(self):
+        order = self.make_order()
+        self.authenticate(self.customer_token)
+        response = self.client.patch(
+            f'/api/orders/{order.pk}/', {'status': 'completed'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_admin_can_delete_an_order(self):
+        order = self.make_order()
+        admin = User.objects.create_user(
+            username='admin', password='SicheresPW123', is_staff=True)
+        self.authenticate(Token.objects.create(user=admin))
+        response = self.client.delete(f'/api/orders/{order.pk}/')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Order.objects.count(), 0)
