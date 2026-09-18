@@ -154,20 +154,6 @@ python manage.py test orders_app.tests.test_orders.OrderTests.test_customer_can_
 Add `-v 2` for single test names and `--failfast` to stop at the first error.
 
 
-## Docker
-
-The image runs the development server, so it is meant for trying the API out, not for
-production. `.env` is not copied into the image — pass it at start:
-
-```powershell
-docker build --tag coderr-backend .
-docker run --publish 8000:8000 --env-file .env coderr-backend
-```
-
-The container starts with an empty SQLite database; run `migrate` and register users
-as described above.
-
-
 ## Debugging
 
 Run the debugger through `manage.py`, never on a single file — otherwise
@@ -184,7 +170,7 @@ repository and consumes this API.
 
 Technologies: Python, Django, Django REST Framework, Django ORM with SQLite,
 django-filter, django-cors-headers, DRF token authentication, Pillow, python-dotenv,
-the Django test framework, Docker and Git.
+the Django test framework and Git.
 
 Concepts:
 
@@ -200,4 +186,4 @@ Concepts:
 - Password hashing, configuration through environment variables, CORS
 - Media uploads
 - API integration tests for the happy path and the 400/401/403/404 cases
-- Containerisation with Docker, Conventional Commits
+- Conventional Commits
