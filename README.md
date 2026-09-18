@@ -142,7 +142,46 @@ Query parameters:
 - reviews: `?business_user_id=`, `?reviewer_id=`, `?ordering=`
 
 The offer list is paginated, so it answers with `count`, `next`, `previous` and `results`.
-All other lists return a plain array.
+A page holds 20 offers, `?page_size=` raises that up to 50. All other lists return a
+plain array.
+
+### Rules
+
+- An offer is created with exactly three details, one each of `basic`, `standard` and
+  `premium`. A PATCH may send single details; they are matched by their `offer_type`.
+- Offer images may be at most 5 MB.
+- An order copies the conditions of the chosen offer detail, so a later price change
+  leaves it untouched. The client only sends `offer_detail_id`.
+- The status of an order is `in_progress`, `completed` or `cancelled`. It is the only
+  field a PATCH may change; unknown keys are answered with a 400.
+- Only business users can be reviewed, with a rating from 1 to 5. A PATCH may change
+  `rating` and `description`, nothing else.
+- An email address belongs to one account only, at registration and in the profile.
+  It is stored lower cased.
+
+### Rate limits
+
+Every endpoint is throttled. Anonymous callers are counted per IP address, logged in
+ones per user. Above the limit the API answers with `429 Too Many Requests` and a
+`Retry-After` header.
+
+| Scope | Limit |
+|---|---|
+| all requests, anonymous | 60 / minute |
+| all requests, logged in | 240 / minute |
+| registration | 5 / hour |
+| login | 5 / minute |
+| profile update | 30 / hour |
+| offer create | 10 / hour |
+| offer update and delete | 60 / hour |
+| order create | 30 / hour |
+| order update and delete | 60 / hour |
+| review create | 10 / hour |
+| review update and delete | 30 / hour |
+| base info | 30 / minute |
+
+The rates live in `REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']` in `core/settings.py`, the
+scopes in `<app>/api/throttles.py`.
 
 
 ## Tests
@@ -186,7 +225,8 @@ Concepts:
 - Query annotation and aggregation (Min, Avg, Count)
 - Filtering, searching, ordering and pagination
 - Data modelling with foreign keys, choices, unique constraints and migrations
-- Password hashing, configuration through environment variables, CORS
+- Password hashing and validation, configuration through environment variables, CORS
+- Rate limiting with throttle scopes per endpoint
 - Media uploads
 - API integration tests for the happy path and the 400/401/403/404 cases
 - Conventional Commits
