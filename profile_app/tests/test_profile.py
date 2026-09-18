@@ -108,6 +108,62 @@ class ProfileDetailTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_email_of_another_user_is_rejected(self):
+        self.other.email = 'taken@mail.de'
+        self.other.save()
+        self.authenticate(self.owner_token)
+        response = self.client.patch(
+            self.url, {'email': 'TAKEN@mail.de'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.owner.refresh_from_db()
+        self.assertEqual(self.owner.email, 'owner@mail.de')
+
+    def test_owner_may_send_the_own_email_again(self):
+        self.authenticate(self.owner_token)
+        response = self.client.patch(
+            self.url, {'email': 'owner@mail.de'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_email_is_rejected(self):
+        self.authenticate(self.owner_token)
+        response = self.client.patch(
+            self.url, {'email': 'keine-mail'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_type_cannot_be_changed(self):
+        self.authenticate(self.owner_token)
+        self.client.patch(self.url, {'type': 'customer'}, format='json')
+
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.type, 'business')
+
+    def test_patch_on_an_unknown_profile_returns_404(self):
+        self.authenticate(self.owner_token)
+        response = self.client.patch(
+            '/api/profile/9999/', {'location': 'Hamburg'}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_put_is_not_allowed(self):
+        self.authenticate(self.owner_token)
+        response = self.client.put(
+            self.url, {'location': 'Hamburg'}, format='json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_empty_fields_are_strings_not_null(self):
+        UserProfile.objects.create(user=self.other, type='customer')
+        self.authenticate(self.owner_token)
+        response = self.client.get(f'/api/profile/{self.other.pk}/')
+
+        for field in ('first_name', 'last_name', 'location', 'tel',
+                      'description', 'working_hours'):
+            self.assertEqual(response.data[field], '', field)
+
 
 class ProfileLookupTests(APITestCase):
     """The url of a profile carries the user id, not the id of the profile row.
@@ -182,3 +238,18 @@ class ProfileListTests(APITestCase):
         response = self.client.get('/api/profiles/business/')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_customer_list_needs_authentication(self):
+        self.client.credentials()
+        response = self.client.get('/api/profiles/customer/')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_list_entries_carry_the_documented_fields(self):
+        business = self.client.get('/api/profiles/business/').data[0]
+        customer = self.client.get('/api/profiles/customer/').data[0]
+
+        self.assertIn('working_hours', business)
+        self.assertNotIn('email', business)
+        self.assertIn('uploaded_at', customer)
+        self.assertNotIn('tel', customer)

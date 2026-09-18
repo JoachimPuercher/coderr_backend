@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from auth_app.models import UserProfile
@@ -38,6 +39,16 @@ class ProfilSerializer(serializers.ModelSerializer):
             'type',
             'created_at'
         ]
+
+    def validate_email(self, value):
+        """Reject an address another user has, store it lower cased."""
+        new_mail = value.lower()
+        # the owner may send the own address again without it counting
+        others = User.objects.exclude(pk=self.instance.user_id)
+        if others.filter(email=new_mail).exists():
+            raise serializers.ValidationError('Email already exists')
+        else:
+            return new_mail
 
     def update(self, instance, validated_data):
         """Update the profile and the related user."""
