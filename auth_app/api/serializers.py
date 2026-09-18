@@ -1,4 +1,6 @@
+from django.contrib.auth import password_validation
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from ..models import UserTypeChoices, UserProfile
@@ -45,6 +47,20 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Email already exists')
         else:
             return new_mail
+
+    def validate_password(self, value):
+        """Run Django's password validators from AUTH_PASSWORD_VALIDATORS."""
+        # the similarity check compares against username and email, so it
+        # gets an unsaved user that carries the submitted values
+        candidate = User(
+            username=self.initial_data.get('username', ''),
+            email=self.initial_data.get('email', ''),
+        )
+        try:
+            password_validation.validate_password(value, user=candidate)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError(list(error.messages)) from error
+        return value
 
     def validate(self, values):
         """Both password fields have to match."""

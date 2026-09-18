@@ -95,6 +95,41 @@ class RegistrationTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 0)
 
+    def test_weak_password_is_rejected(self):
+        data = {**self.data, 'password': '1234', 'repeated_password': '1234'}
+        response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('password', response.data)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_password_close_to_the_username_is_rejected(self):
+        data = {
+            **self.data,
+            'password': 'testuser1',
+            'repeated_password': 'testuser1',
+        }
+        response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('password', response.data)
+
+    def test_missing_type_is_rejected(self):
+        data = dict(self.data)
+        del data['type']
+        response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('type', response.data)
+
+    def test_registration_is_throttled_after_five_attempts(self):
+        for _ in range(5):
+            self.client.post(self.url, {}, format='json')
+        response = self.client.post(self.url, {}, format='json')
+
+        self.assertEqual(
+            response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+
 
 class LoginTests(APITestCase):
     """POST /api/login/: token for valid credentials, otherwise a 400."""
@@ -179,6 +214,16 @@ class LoginTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('username', response.data)
+
+    def test_login_is_throttled_after_five_attempts(self):
+        wrong = {**self.data, 'password': 'FalschesPW123'}
+        for _ in range(5):
+            self.client.post(self.url, wrong, format='json')
+        response = self.client.post(self.url, self.data, format='json')
+
+        # even the right password has to wait until the limit is over
+        self.assertEqual(
+            response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
 
 
 class DocumentedUrlTests(APITestCase):

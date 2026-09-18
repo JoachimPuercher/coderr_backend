@@ -44,6 +44,9 @@ POST /api/registration/
 { "username": "cust", "email": "cust@mail.de", "password": "…", "repeated_password": "…", "type": "customer" }
 ```
 
+Passwords go through Django's validators: at least 8 characters, not only digits,
+not a common password and not too close to the username or the email.
+
 The response contains the token for the `Authorization` header. A superuser created with
 `createsuperuser` has **no** profile — it can reach the admin and delete orders, but not
 create offers or reviews.
