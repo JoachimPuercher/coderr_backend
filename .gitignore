@@ -11,6 +11,7 @@ venv/
 db.sqlite3
 *.log
 media/
+initial_seed/images/
 staticfiles/
 data/
 local_settings.py
