@@ -1,5 +1,12 @@
+import io
+import os
+import shutil
+import tempfile
+
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
+from PIL import Image
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -78,6 +85,20 @@ class ProfileDetailTests(APITestCase):
         self.profile.refresh_from_db()
         self.assertEqual(self.owner.first_name, 'Max')
         self.assertEqual(self.profile.tel, '0170123456')
+
+    def test_owner_can_upload_a_profile_picture(self):
+        self.authenticate(self.owner_token)
+        media = tempfile.mkdtemp()
+        # the upload goes to a throwaway folder instead of the real media/
+        self.addCleanup(shutil.rmtree, media, ignore_errors=True)
+        with self.settings(MEDIA_ROOT=media):
+            response = self.client.patch(
+                self.url, {'file': make_image()}, format='multipart')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.profile.refresh_from_db()
+        self.assertTrue(self.profile.file)
+        self.assertIn('image_uploads/', response.data['file'])
 
     def test_unauthenticated_request_is_rejected(self):
         get_response = self.client.get(self.url)
@@ -163,6 +184,15 @@ class ProfileDetailTests(APITestCase):
         for field in ('first_name', 'last_name', 'location', 'tel',
                       'description', 'working_hours'):
             self.assertEqual(response.data[field], '', field)
+
+
+def make_image():
+    """A small valid PNG; random pixels stop it from shrinking to nothing."""
+    buffer = io.BytesIO()
+    Image.frombytes('RGB', (20, 20), os.urandom(20 * 20 * 3)).save(
+        buffer, 'PNG')
+    return SimpleUploadedFile(
+        'profile.png', buffer.getvalue(), content_type='image/png')
 
 
 class ProfileLookupTests(APITestCase):

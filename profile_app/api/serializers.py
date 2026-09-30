@@ -34,8 +34,8 @@ class ProfilSerializer(serializers.ModelSerializer):
             'created_at',
         ]
 
+        # file stays writable: both profile types upload their picture here
         read_only_fields = [
-            'file',
             'type',
             'created_at'
         ]
