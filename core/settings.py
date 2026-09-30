@@ -35,6 +35,11 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+# behind the reverse proxy Django only sees plain http; the proxy
+# tells it via this header that the client connection was https,
+# otherwise CSRF checks on https admin logins fail
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Application definition
 
@@ -59,6 +64,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # serves the collected static files (admin, browsable API) when
+    # DEBUG is off; has to sit right below SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     # has to sit above CommonMiddleware so the CORS headers survive a redirect
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -95,7 +103,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # in docker the file is moved to a mounted volume via env
+        'NAME': os.getenv('SQLITE_PATH', BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -147,7 +156,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# collectstatic copies everything here; whitenoise serves it from there
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# uploads; in docker moved to a mounted volume via env
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 MEDIA_URL = '/media/'
 
 REST_FRAMEWORK = {

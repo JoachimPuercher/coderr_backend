@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    container_name: coderr
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # database and uploads live in the mounted host folder (see
+      # volumes), so they survive rebuilds and can be backed up as files
+      SQLITE_PATH: /app/data/db.sqlite3
+      MEDIA_ROOT: /app/data/media
+    volumes:
+      # host path (left) : container path (right); both are the same folder.
+      # Keep it outside the cloned repo so a fresh clone never touches the data
+      - /home/yogi/coderr_files/:/app/data
+    ports:
+      # only reachable from the server itself; nginx on the host
+      # forwards the public domain to this port
+      - "127.0.0.1:8001:8000"

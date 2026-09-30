@@ -12,6 +12,7 @@ db.sqlite3
 *.log
 media/
 staticfiles/
+data/
 local_settings.py
 
 # Environment
