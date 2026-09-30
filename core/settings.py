@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'orders_app',
     'reviews_app',
     'base_info_app',
+    'initial_seed',
     'django_filters'
 ]
 

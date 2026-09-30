@@ -1,0 +1,466 @@
+{
+  "password": "CoderrDemo2026",
+  "businesses": [
+    {
+      "username": "pixelwerk_berlin",
+      "first_name": "Lena",
+      "last_name": "Hartmann",
+      "email": "lena@pixelwerk-berlin.de",
+      "location": "Berlin",
+      "tel": "+49 30 4471 2280",
+      "description": "Webdesign-Studio für kleine Unternehmen und Selbstständige. Klare Layouts, schnelle Ladezeiten, mobil zuerst.",
+      "working_hours": "Mo-Fr 9-17 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her mid-thirties, web designer, friendly smile, short dark hair, neutral light grey studio background, soft natural light, photorealistic, square crop",
+      "offer": {
+        "title": "Webdesign für kleine Unternehmen",
+        "description": "Ich gestalte und baue Ihre Website mit modernem Design, sauberem Code und einem Fokus auf Ladezeit und Mobilgeräte.",
+        "image_prompt": "Flat modern vector illustration of web design, laptop screen showing a clean website layout with color swatches beside it, muted blue and warm accent colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Basic Landingpage", "revisions": 1, "delivery_time_in_days": 7, "price": "299.00", "features": ["1 Seite", "Responsive Design", "Kontaktformular"]},
+          {"offer_type": "standard", "title": "Standard Website", "revisions": 3, "delivery_time_in_days": 14, "price": "799.00", "features": ["Bis zu 5 Seiten", "Responsive Design", "Kontaktformular", "Basis-SEO"]},
+          {"offer_type": "premium", "title": "Premium Website", "revisions": 5, "delivery_time_in_days": 21, "price": "1499.00", "features": ["Bis zu 10 Seiten", "Responsive Design", "Kontaktformular", "Basis-SEO", "Blog", "3 Monate Support"]}
+        ]
+      }
+    },
+    {
+      "username": "lichtblick_foto",
+      "first_name": "Jonas",
+      "last_name": "Weber",
+      "email": "jonas@lichtblick-foto.de",
+      "location": "Hamburg",
+      "tel": "+49 40 5589 3310",
+      "description": "Fotograf für Business-Porträts, Produktfotos und Events. Natürliches Licht, ehrliche Bilder.",
+      "working_hours": "Di-Sa 10-18 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his early forties, photographer, light beard, relaxed smile, neutral warm studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Business-Porträts und Produktfotos",
+        "description": "Professionelle Fotos für Ihre Website, Ihr Profil oder Ihren Shop. Studio oder vor Ort, inklusive Bildbearbeitung.",
+        "image_prompt": "Flat modern vector illustration of a photography studio, camera on a tripod, softbox light and a backdrop, muted warm colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Porträt-Session kurz", "revisions": 1, "delivery_time_in_days": 5, "price": "149.00", "features": ["30 Minuten Shooting", "3 bearbeitete Fotos"]},
+          {"offer_type": "standard", "title": "Porträt-Session Standard", "revisions": 2, "delivery_time_in_days": 7, "price": "349.00", "features": ["90 Minuten Shooting", "10 bearbeitete Fotos", "2 Outfits"]},
+          {"offer_type": "premium", "title": "Produkt- und Teamfotos", "revisions": 3, "delivery_time_in_days": 10, "price": "899.00", "features": ["Halber Tag vor Ort", "30 bearbeitete Fotos", "Teamfotos", "Produktfotos", "Nutzungsrechte unbegrenzt"]}
+        ]
+      }
+    },
+    {
+      "username": "seo_kompass",
+      "first_name": "Mira",
+      "last_name": "Schneider",
+      "email": "mira@seo-kompass.de",
+      "location": "München",
+      "tel": "+49 89 2201 4455",
+      "description": "Suchmaschinenoptimierung mit Plan: Keyword-Recherche, Onpage-Optimierung und verständliche Reports.",
+      "working_hours": "Mo-Do 8-16 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her late twenties, SEO consultant, confident smile, glasses, tied back hair, neutral light studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "SEO-Optimierung für Ihre Website",
+        "description": "Ich analysiere Ihre Website, finde die richtigen Keywords und setze die Onpage-Maßnahmen um, damit Sie bei Google gefunden werden.",
+        "image_prompt": "Flat modern vector illustration of search engine optimization, magnifying glass over a rising bar chart and a browser window, muted green and grey colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "SEO-Check", "revisions": 1, "delivery_time_in_days": 5, "price": "199.00", "features": ["Technische Analyse", "Keyword-Liste", "PDF-Report"]},
+          {"offer_type": "standard", "title": "Onpage-Optimierung", "revisions": 2, "delivery_time_in_days": 14, "price": "599.00", "features": ["Technische Analyse", "Keyword-Recherche", "Optimierung von 10 Seiten", "Meta-Texte"]},
+          {"offer_type": "premium", "title": "SEO-Betreuung 3 Monate", "revisions": 6, "delivery_time_in_days": 30, "price": "1799.00", "features": ["Alles aus Standard", "Monatliches Reporting", "Content-Plan", "Linkaufbau", "Telefon-Support"]}
+        ]
+      }
+    },
+    {
+      "username": "markenschmiede",
+      "first_name": "Tobias",
+      "last_name": "Krüger",
+      "email": "tobias@markenschmiede.de",
+      "location": "Köln",
+      "tel": "+49 221 3390 7712",
+      "description": "Logo- und Markendesign für Gründer und Mittelstand. Vom ersten Entwurf bis zum fertigen Styleguide.",
+      "working_hours": "Mo-Fr 9-18 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his mid-thirties, graphic designer, short hair, subtle smile, dark casual shirt, neutral grey studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Logo-Design und Markenauftritt",
+        "description": "Ein Logo, das zu Ihnen passt: individuell, zeitlos und in allen Formaten für Print und Web.",
+        "image_prompt": "Flat modern vector illustration of brand design, abstract geometric logo shapes on a designer desk with pen and color palette, muted orange and charcoal colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Logo Basic", "revisions": 2, "delivery_time_in_days": 7, "price": "249.00", "features": ["2 Entwürfe", "Finale Datei als PNG und SVG"]},
+          {"offer_type": "standard", "title": "Logo Standard", "revisions": 4, "delivery_time_in_days": 10, "price": "549.00", "features": ["4 Entwürfe", "Alle Dateiformate", "Farb- und Schwarzweiß-Version", "Visitenkarte"]},
+          {"offer_type": "premium", "title": "Markenpaket", "revisions": 6, "delivery_time_in_days": 21, "price": "1299.00", "features": ["6 Entwürfe", "Alle Dateiformate", "Styleguide", "Visitenkarte und Briefpapier", "Social-Media-Vorlagen"]}
+        ]
+      }
+    },
+    {
+      "username": "wortwerkstatt",
+      "first_name": "Sophie",
+      "last_name": "Lang",
+      "email": "sophie@wortwerkstatt.de",
+      "location": "Leipzig",
+      "tel": "+49 341 9982 1140",
+      "description": "Texterin für Websites, Newsletter und Produktbeschreibungen. Klar, freundlich und auf den Punkt.",
+      "working_hours": "Mo-Fr 8-15 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her early forties, copywriter, warm smile, shoulder-length blonde hair, neutral beige studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Website-Texte, die verkaufen",
+        "description": "Ich schreibe Texte, die Ihre Kunden verstehen und die bei Google funktionieren. Inklusive Korrektur und Abstimmung.",
+        "image_prompt": "Flat modern vector illustration of copywriting, notebook with a pen, coffee cup and a floating text document, muted teal and cream colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Eine Seite Text", "revisions": 1, "delivery_time_in_days": 3, "price": "129.00", "features": ["Bis zu 400 Wörter", "Korrektur"]},
+          {"offer_type": "standard", "title": "Website komplett", "revisions": 2, "delivery_time_in_days": 10, "price": "499.00", "features": ["Bis zu 5 Seiten", "Keyword-Abstimmung", "Korrektur", "Meta-Beschreibungen"]},
+          {"offer_type": "premium", "title": "Content-Paket", "revisions": 4, "delivery_time_in_days": 21, "price": "1199.00", "features": ["Bis zu 10 Seiten", "4 Blogartikel", "Newsletter-Vorlage", "Keyword-Abstimmung", "Korrektur"]}
+        ]
+      }
+    },
+    {
+      "username": "cutbox_video",
+      "first_name": "Felix",
+      "last_name": "Brandt",
+      "email": "felix@cutbox-video.de",
+      "location": "Stuttgart",
+      "tel": "+49 711 4488 9021",
+      "description": "Videoschnitt und Motion Design für Social Media, Imagefilme und Erklärvideos.",
+      "working_hours": "Mo-Fr 10-19 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his late twenties, video editor, casual hoodie, friendly expression, neutral dark grey studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Videoschnitt für Social Media und Web",
+        "description": "Aus Ihrem Rohmaterial wird ein fertiges Video mit Schnitt, Musik, Untertiteln und Farbkorrektur.",
+        "image_prompt": "Flat modern vector illustration of video editing, timeline on a monitor with film clips and a play button, muted purple and slate colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Kurzclip", "revisions": 1, "delivery_time_in_days": 4, "price": "179.00", "features": ["Bis 60 Sekunden", "Schnitt und Musik", "Untertitel"]},
+          {"offer_type": "standard", "title": "Imagefilm kurz", "revisions": 2, "delivery_time_in_days": 10, "price": "649.00", "features": ["Bis 3 Minuten", "Schnitt und Musik", "Farbkorrektur", "Untertitel", "Titel-Animation"]},
+          {"offer_type": "premium", "title": "Erklärvideo", "revisions": 3, "delivery_time_in_days": 21, "price": "1699.00", "features": ["Bis 5 Minuten", "Drehbuch", "Motion Design", "Sprecher", "Farbkorrektur", "Alle Formate"]}
+        ]
+      }
+    },
+    {
+      "username": "appfabrik_muc",
+      "first_name": "Nadia",
+      "last_name": "Öztürk",
+      "email": "nadia@appfabrik.de",
+      "location": "München",
+      "tel": "+49 89 7710 3388",
+      "description": "Entwicklung von Web- und Mobile-Apps mit Django und React. Von der Idee bis zum Launch.",
+      "working_hours": "Mo-Fr 9-18 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her early thirties, software developer, dark curly hair, confident smile, neutral light studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "App-Entwicklung mit Django und React",
+        "description": "Ich entwickle Ihre Web-App oder Ihren Prototyp, sauber getestet und bereit für den Betrieb.",
+        "image_prompt": "Flat modern vector illustration of app development, smartphone and laptop with code blocks and UI components floating around, muted indigo and mint colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Prototyp", "revisions": 1, "delivery_time_in_days": 10, "price": "899.00", "features": ["Klickbarer Prototyp", "3 Screens", "Feedback-Runde"]},
+          {"offer_type": "standard", "title": "MVP", "revisions": 3, "delivery_time_in_days": 30, "price": "3499.00", "features": ["Backend mit REST-API", "Frontend", "Login", "Tests", "Deployment"]},
+          {"offer_type": "premium", "title": "Komplett-App", "revisions": 5, "delivery_time_in_days": 60, "price": "7999.00", "features": ["Alles aus MVP", "Admin-Bereich", "Zahlungen", "Monitoring", "3 Monate Wartung"]}
+        ]
+      }
+    },
+    {
+      "username": "zahlenklar",
+      "first_name": "Markus",
+      "last_name": "Vogel",
+      "email": "markus@zahlenklar.de",
+      "location": "Frankfurt am Main",
+      "tel": "+49 69 2204 6617",
+      "description": "Buchhaltung und Vorbereitung der Steuererklärung für Freelancer und kleine Firmen. Digital und pünktlich.",
+      "working_hours": "Mo-Fr 8-17 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his fifties, accountant, grey hair, glasses, calm friendly expression, white shirt, neutral light blue studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Buchhaltung für Freelancer",
+        "description": "Belege digital einreichen, ich übernehme Buchung, Umsatzsteuer-Voranmeldung und die Vorbereitung für den Steuerberater.",
+        "image_prompt": "Flat modern vector illustration of bookkeeping, calculator, receipts and a tidy ledger with a checkmark, muted navy and soft yellow colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Monatsbuchhaltung klein", "revisions": 1, "delivery_time_in_days": 7, "price": "99.00", "features": ["Bis 30 Belege", "Umsatzsteuer-Voranmeldung"]},
+          {"offer_type": "standard", "title": "Monatsbuchhaltung", "revisions": 2, "delivery_time_in_days": 7, "price": "249.00", "features": ["Bis 120 Belege", "Umsatzsteuer-Voranmeldung", "Monatsauswertung", "Rückfragen per E-Mail"]},
+          {"offer_type": "premium", "title": "Jahresabschluss-Paket", "revisions": 3, "delivery_time_in_days": 30, "price": "1490.00", "features": ["12 Monate Buchhaltung", "EÜR-Vorbereitung", "Anlagenverzeichnis", "Telefon-Support", "Abstimmung mit Steuerberater"]}
+        ]
+      }
+    },
+    {
+      "username": "sprachbruecke",
+      "first_name": "Elena",
+      "last_name": "Petrova",
+      "email": "elena@sprachbruecke.de",
+      "location": "Düsseldorf",
+      "tel": "+49 211 5566 7830",
+      "description": "Übersetzungen Deutsch, Englisch und Russisch für Websites, Verträge und Marketing. Muttersprachliche Qualität.",
+      "working_hours": "Mo-Fr 9-16 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her late thirties, translator, straight dark hair, gentle smile, neutral off-white studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Übersetzung Deutsch, Englisch, Russisch",
+        "description": "Fachübersetzungen mit Korrekturlesen, auf Wunsch mit Terminologie-Liste für spätere Aufträge.",
+        "image_prompt": "Flat modern vector illustration of translation services, two speech bubbles with different alphabets connected by an arrow over an open book, muted coral and sage colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Kurztext", "revisions": 1, "delivery_time_in_days": 2, "price": "79.00", "features": ["Bis 500 Wörter", "Eine Sprachrichtung"]},
+          {"offer_type": "standard", "title": "Website-Übersetzung", "revisions": 2, "delivery_time_in_days": 7, "price": "399.00", "features": ["Bis 3000 Wörter", "Eine Sprachrichtung", "Korrekturlesen", "Terminologie-Liste"]},
+          {"offer_type": "premium", "title": "Vertrags- und Fachübersetzung", "revisions": 3, "delivery_time_in_days": 14, "price": "990.00", "features": ["Bis 8000 Wörter", "Zwei Sprachrichtungen", "Korrekturlesen durch zweite Person", "Terminologie-Liste", "Express möglich"]}
+        ]
+      }
+    },
+    {
+      "username": "socialschmiede",
+      "first_name": "Julian",
+      "last_name": "Meier",
+      "email": "julian@socialschmiede.de",
+      "location": "Bremen",
+      "tel": "+49 421 3378 9902",
+      "description": "Social-Media-Betreuung für lokale Unternehmen: Content-Planung, Posts, Community und Auswertung.",
+      "working_hours": "Mo-Fr 10-18 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his late twenties, social media manager, stylish haircut, bright smile, casual shirt, neutral pastel studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Social-Media-Betreuung monatlich",
+        "description": "Ich plane und erstelle Ihre Beiträge für Instagram, Facebook und LinkedIn und werte die Ergebnisse monatlich aus.",
+        "image_prompt": "Flat modern vector illustration of social media marketing, smartphone with like and comment icons, content calendar and a small growth chart, muted pink and slate colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Starter", "revisions": 1, "delivery_time_in_days": 7, "price": "290.00", "features": ["8 Posts pro Monat", "1 Kanal", "Redaktionsplan"]},
+          {"offer_type": "standard", "title": "Wachstum", "revisions": 2, "delivery_time_in_days": 7, "price": "690.00", "features": ["16 Posts pro Monat", "2 Kanäle", "Redaktionsplan", "Community-Management", "Monatsreport"]},
+          {"offer_type": "premium", "title": "Rundum", "revisions": 4, "delivery_time_in_days": 10, "price": "1490.00", "features": ["30 Posts pro Monat", "3 Kanäle", "Reels und Stories", "Community-Management", "Anzeigen-Betreuung", "Monatsreport"]}
+        ]
+      }
+    },
+    {
+      "username": "formraum_3d",
+      "first_name": "Katrin",
+      "last_name": "Bauer",
+      "email": "katrin@formraum3d.de",
+      "location": "Dresden",
+      "tel": "+49 351 8812 4470",
+      "description": "3D-Visualisierung für Architektur, Produkte und Messestände. Fotorealistisch oder stilisiert.",
+      "working_hours": "Mo-Fr 9-17 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her mid-thirties, 3D artist, short auburn hair, thoughtful smile, neutral dark studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "3D-Visualisierung für Architektur und Produkte",
+        "description": "Aus Plänen oder Skizzen entstehen fotorealistische Renderings, die Ihr Projekt vor dem Bau zeigen.",
+        "image_prompt": "Flat modern vector illustration of 3D visualization, isometric building model with a 3D cube and a render preview window, muted steel blue and sand colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Einzelrendering", "revisions": 1, "delivery_time_in_days": 5, "price": "349.00", "features": ["1 Ansicht", "Full-HD-Auflösung"]},
+          {"offer_type": "standard", "title": "Rendering-Set", "revisions": 2, "delivery_time_in_days": 12, "price": "990.00", "features": ["3 Ansichten", "4K-Auflösung", "Materialabstimmung", "Umgebung und Licht"]},
+          {"offer_type": "premium", "title": "Visualisierung komplett", "revisions": 4, "delivery_time_in_days": 21, "price": "2490.00", "features": ["6 Ansichten", "4K-Auflösung", "Kamerafahrt 20 Sekunden", "Materialabstimmung", "Umgebung und Licht", "Quelldateien"]}
+        ]
+      }
+    },
+    {
+      "username": "podcastschnitt",
+      "first_name": "David",
+      "last_name": "Roth",
+      "email": "david@podcastschnitt.de",
+      "location": "Nürnberg",
+      "tel": "+49 911 6620 1185",
+      "description": "Audio-Postproduktion für Podcasts: Schnitt, Rauschfilter, Lautheit, Intro und Veröffentlichung.",
+      "working_hours": "Mo-Sa 9-19 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his mid-thirties, audio engineer, headphones around the neck, friendly grin, neutral warm grey studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Podcast-Schnitt und Audio-Postproduktion",
+        "description": "Sie nehmen auf, ich mache daraus eine saubere Folge mit gleichmäßiger Lautstärke, ohne Störgeräusche und mit Ihrem Intro.",
+        "image_prompt": "Flat modern vector illustration of podcast production, studio microphone with sound waves and headphones, muted mustard and dark teal colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Folge bis 30 Minuten", "revisions": 1, "delivery_time_in_days": 3, "price": "69.00", "features": ["Schnitt", "Rauschfilter", "Lautheit nach Standard"]},
+          {"offer_type": "standard", "title": "Folge bis 60 Minuten", "revisions": 2, "delivery_time_in_days": 4, "price": "129.00", "features": ["Schnitt", "Rauschfilter", "Lautheit nach Standard", "Intro und Outro", "Kapitelmarken"]},
+          {"offer_type": "premium", "title": "Monatspaket 4 Folgen", "revisions": 3, "delivery_time_in_days": 14, "price": "449.00", "features": ["4 Folgen bis 60 Minuten", "Schnitt und Mastering", "Intro und Outro", "Kapitelmarken", "Shownotes", "Upload zum Hoster"]}
+        ]
+      }
+    },
+    {
+      "username": "tintenfisch_illu",
+      "first_name": "Hanna",
+      "last_name": "Fischer",
+      "email": "hanna@tintenfisch-illustration.de",
+      "location": "Freiburg",
+      "tel": "+49 761 4409 2216",
+      "description": "Illustrationen für Kinderbücher, Verpackungen und Websites. Digital oder mit Aquarell.",
+      "working_hours": "Di-Fr 10-16 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her late twenties, illustrator, colorful scarf, curly hair, cheerful smile, neutral cream studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Individuelle Illustrationen",
+        "description": "Handgezeichnete oder digitale Illustrationen in Ihrem Stil, für Print und Web, mit allen Nutzungsrechten.",
+        "image_prompt": "Flat modern vector illustration of an illustrator's workspace, drawing tablet, watercolor brushes and a whimsical sketched octopus, muted lavender and peach colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Einzelillustration", "revisions": 1, "delivery_time_in_days": 5, "price": "159.00", "features": ["1 Motiv", "Digital", "Web-Auflösung"]},
+          {"offer_type": "standard", "title": "Illustrations-Set", "revisions": 2, "delivery_time_in_days": 12, "price": "549.00", "features": ["4 Motive", "Digital oder Aquarell", "Print-Auflösung", "Nutzungsrechte"]},
+          {"offer_type": "premium", "title": "Buch- oder Kampagnenpaket", "revisions": 4, "delivery_time_in_days": 30, "price": "1690.00", "features": ["12 Motive", "Charakterdesign", "Print-Auflösung", "Nutzungsrechte", "Quelldateien", "Layout-Abstimmung"]}
+        ]
+      }
+    },
+    {
+      "username": "startklar_beratung",
+      "first_name": "Oliver",
+      "last_name": "Schmitt",
+      "email": "oliver@startklar-beratung.de",
+      "location": "Hannover",
+      "tel": "+49 511 2287 5590",
+      "description": "Gründungsberatung: Businessplan, Fördermittel, Preisgestaltung und der erste Kundenkontakt.",
+      "working_hours": "Mo-Fr 9-17 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a man in his mid-forties, business consultant, neat short hair, blazer without tie, confident warm smile, neutral light grey studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Gründungsberatung und Businessplan",
+        "description": "Ich begleite Sie von der Idee bis zum Businessplan, prüfe Fördermöglichkeiten und bereite Sie auf das Bankgespräch vor.",
+        "image_prompt": "Flat modern vector illustration of business consulting, two people at a table with a growth chart, a lightbulb and a document with a checklist, muted forest green and beige colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Erstgespräch", "revisions": 0, "delivery_time_in_days": 3, "price": "120.00", "features": ["90 Minuten Videocall", "Zusammenfassung per E-Mail"]},
+          {"offer_type": "standard", "title": "Businessplan", "revisions": 2, "delivery_time_in_days": 14, "price": "890.00", "features": ["Businessplan-Dokument", "Finanzplan 3 Jahre", "2 Beratungstermine", "Fördermittel-Check"]},
+          {"offer_type": "premium", "title": "Gründungsbegleitung", "revisions": 5, "delivery_time_in_days": 45, "price": "2490.00", "features": ["Businessplan und Finanzplan", "6 Beratungstermine", "Fördermittel-Antrag", "Vorbereitung Bankgespräch", "Preis- und Angebotsstrategie", "E-Mail-Support 3 Monate"]}
+        ]
+      }
+    },
+    {
+      "username": "serverpilot",
+      "first_name": "Leonie",
+      "last_name": "Wagner",
+      "email": "leonie@serverpilot.de",
+      "location": "Karlsruhe",
+      "tel": "+49 721 9915 3304",
+      "description": "Hosting, Docker-Setup und Wartung für Web-Anwendungen. Backups, Monitoring und Updates inklusive.",
+      "working_hours": "Mo-Fr 8-18 Uhr",
+      "image_prompt": "Professional headshot portrait photo of a woman in her early thirties, DevOps engineer, ponytail, calm confident smile, dark t-shirt, neutral graphite studio background, soft light, photorealistic, square crop",
+      "offer": {
+        "title": "Hosting und Server-Wartung",
+        "description": "Ich richte Ihren Server mit Docker, HTTPS und Backups ein und halte ihn laufend aktuell und sicher.",
+        "image_prompt": "Flat modern vector illustration of server hosting, stacked server rack with a shield icon, cloud and a gear, muted cobalt and light grey colors, no text, clean composition",
+        "details": [
+          {"offer_type": "basic", "title": "Server-Setup", "revisions": 1, "delivery_time_in_days": 3, "price": "249.00", "features": ["Docker-Installation", "HTTPS-Zertifikat", "Firewall"]},
+          {"offer_type": "standard", "title": "Setup mit Backups", "revisions": 2, "delivery_time_in_days": 5, "price": "549.00", "features": ["Docker-Installation", "HTTPS-Zertifikat", "Firewall", "Tägliche Backups", "Monitoring", "Dokumentation"]},
+          {"offer_type": "premium", "title": "Betreuung 12 Monate", "revisions": 12, "delivery_time_in_days": 7, "price": "1990.00", "features": ["Alles aus Standard", "Monatliche Updates", "Störungsdienst", "Log-Auswertung", "Skalierungsberatung"]}
+        ]
+      }
+    }
+  ],
+  "customers": [
+    {
+      "username": "anna_mueller",
+      "first_name": "Anna",
+      "last_name": "Müller",
+      "email": "anna.mueller@example.de",
+      "location": "Hamburg",
+      "tel": "+49 40 1122 3344",
+      "description": "Inhaberin eines kleinen Blumenladens, sucht Hilfe für Website und Fotos.",
+      "image_prompt": "Casual portrait photo of a woman in her forties, florist, warm smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "ben_koch",
+      "first_name": "Ben",
+      "last_name": "Koch",
+      "email": "ben.koch@example.de",
+      "location": "Köln",
+      "tel": "+49 221 4455 6677",
+      "description": "Gründer eines Fahrrad-Reparaturservice, braucht Logo und Social Media.",
+      "image_prompt": "Casual portrait photo of a man in his early thirties, bicycle mechanic, friendly grin, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "clara_schulz",
+      "first_name": "Clara",
+      "last_name": "Schulz",
+      "email": "clara.schulz@example.de",
+      "location": "Leipzig",
+      "tel": "+49 341 7788 9900",
+      "description": "Yoga-Lehrerin, möchte ihren Kursplan online anbieten.",
+      "image_prompt": "Casual portrait photo of a woman in her late twenties, yoga teacher, relaxed smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "daniel_becker",
+      "first_name": "Daniel",
+      "last_name": "Becker",
+      "email": "daniel.becker@example.de",
+      "location": "Stuttgart",
+      "tel": "+49 711 2233 4455",
+      "description": "Betreibt ein Café und plant einen Imagefilm und neue Speisekarten.",
+      "image_prompt": "Casual portrait photo of a man in his forties, café owner with apron, welcoming smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "emma_richter",
+      "first_name": "Emma",
+      "last_name": "Richter",
+      "email": "emma.richter@example.de",
+      "location": "Bremen",
+      "tel": "+49 421 5566 7788",
+      "description": "Studentin mit einem Online-Shop für handgemachten Schmuck.",
+      "image_prompt": "Casual portrait photo of a young woman in her early twenties, student, bright smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "finn_wolf",
+      "first_name": "Finn",
+      "last_name": "Wolf",
+      "email": "finn.wolf@example.de",
+      "location": "Dresden",
+      "tel": "+49 351 8899 0011",
+      "description": "Architekt, braucht Visualisierungen und eine übersetzte Website.",
+      "image_prompt": "Casual portrait photo of a man in his late thirties, architect, glasses, thoughtful smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "greta_neumann",
+      "first_name": "Greta",
+      "last_name": "Neumann",
+      "email": "greta.neumann@example.de",
+      "location": "Nürnberg",
+      "tel": "+49 911 3344 5566",
+      "description": "Startet einen Podcast über nachhaltiges Reisen.",
+      "image_prompt": "Casual portrait photo of a woman in her thirties, travel blogger, cheerful expression, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "hannes_braun",
+      "first_name": "Hannes",
+      "last_name": "Braun",
+      "email": "hannes.braun@example.de",
+      "location": "Freiburg",
+      "tel": "+49 761 6677 8899",
+      "description": "Schreibt ein Kinderbuch und sucht eine Illustratorin und Beratung.",
+      "image_prompt": "Casual portrait photo of a man in his fifties, writer, beard, gentle smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "ida_zimmermann",
+      "first_name": "Ida",
+      "last_name": "Zimmermann",
+      "email": "ida.zimmermann@example.de",
+      "location": "Kiel",
+      "tel": "+49 431 9900 1122",
+      "description": "Physiotherapeutin, eröffnet eine zweite Praxis.",
+      "image_prompt": "Casual portrait photo of a woman in her forties, physiotherapist, confident smile, natural daylight, soft blurred background, photorealistic, square crop"
+    },
+    {
+      "username": "jakob_hoffmann",
+      "first_name": "Jakob",
+      "last_name": "Hoffmann",
+      "email": "jakob.hoffmann@example.de",
+      "location": "Münster",
+      "tel": "+49 251 1234 5678",
+      "description": "Betreibt eine kleine Softwarefirma und lagert Buchhaltung und Hosting aus.",
+      "image_prompt": "Casual portrait photo of a man in his early forties, small business owner, friendly expression, natural daylight, soft blurred background, photorealistic, square crop"
+    }
+  ],
+  "orders": [
+    {"customer": "anna_mueller", "business": "pixelwerk_berlin", "offer_type": "standard", "status": "completed"},
+    {"customer": "anna_mueller", "business": "lichtblick_foto", "offer_type": "basic", "status": "in_progress"},
+    {"customer": "ben_koch", "business": "seo_kompass", "offer_type": "basic", "status": "cancelled"},
+    {"customer": "ben_koch", "business": "markenschmiede", "offer_type": "premium", "status": "completed"},
+    {"customer": "clara_schulz", "business": "wortwerkstatt", "offer_type": "standard", "status": "in_progress"},
+    {"customer": "clara_schulz", "business": "cutbox_video", "offer_type": "basic", "status": "completed"},
+    {"customer": "daniel_becker", "business": "appfabrik_muc", "offer_type": "basic", "status": "completed"},
+    {"customer": "daniel_becker", "business": "zahlenklar", "offer_type": "standard", "status": "in_progress"},
+    {"customer": "emma_richter", "business": "sprachbruecke", "offer_type": "basic", "status": "completed"},
+    {"customer": "emma_richter", "business": "socialschmiede", "offer_type": "standard", "status": "in_progress"},
+    {"customer": "finn_wolf", "business": "formraum_3d", "offer_type": "premium", "status": "in_progress"},
+    {"customer": "finn_wolf", "business": "podcastschnitt", "offer_type": "basic", "status": "cancelled"},
+    {"customer": "greta_neumann", "business": "tintenfisch_illu", "offer_type": "basic", "status": "completed"},
+    {"customer": "greta_neumann", "business": "startklar_beratung", "offer_type": "basic", "status": "completed"},
+    {"customer": "hannes_braun", "business": "serverpilot", "offer_type": "standard", "status": "in_progress"},
+    {"customer": "hannes_braun", "business": "pixelwerk_berlin", "offer_type": "basic", "status": "completed"},
+    {"customer": "ida_zimmermann", "business": "lichtblick_foto", "offer_type": "standard", "status": "completed"},
+    {"customer": "ida_zimmermann", "business": "seo_kompass", "offer_type": "standard", "status": "in_progress"},
+    {"customer": "jakob_hoffmann", "business": "markenschmiede", "offer_type": "standard", "status": "completed"},
+    {"customer": "jakob_hoffmann", "business": "wortwerkstatt", "offer_type": "premium", "status": "cancelled"}
+  ],
+  "reviews": [
+    {"reviewer": "anna_mueller", "business": "pixelwerk_berlin", "rating": 5, "description": "Die neue Website sieht toll aus und war schneller fertig als geplant. Sehr klare Kommunikation."},
+    {"reviewer": "anna_mueller", "business": "lichtblick_foto", "rating": 4, "description": "Schöne Fotos vom Laden, ein paar Bilder hätte ich mir heller gewünscht."},
+    {"reviewer": "ben_koch", "business": "seo_kompass", "rating": 3, "description": "Der SEO-Check war solide, für mich als Anfänger aber etwas zu technisch erklärt."},
+    {"reviewer": "ben_koch", "business": "markenschmiede", "rating": 5, "description": "Das Logo trifft genau meinen Stil. Der Styleguide hilft mir jetzt bei allem anderen."},
+    {"reviewer": "clara_schulz", "business": "wortwerkstatt", "rating": 5, "description": "Endlich Texte, die klingen wie ich. Auch die Korrekturrunde lief unkompliziert."},
+    {"reviewer": "clara_schulz", "business": "cutbox_video", "rating": 4, "description": "Der Kurzclip kam gut an, die Untertitel mussten einmal nachgebessert werden."},
+    {"reviewer": "daniel_becker", "business": "appfabrik_muc", "rating": 4, "description": "Der Prototyp hat mir sehr geholfen, meine Idee zu erklären. Preis fair."},
+    {"reviewer": "daniel_becker", "business": "zahlenklar", "rating": 5, "description": "Pünktlich, gründlich, ruhig. Ich muss mich um nichts mehr kümmern."},
+    {"reviewer": "emma_richter", "business": "sprachbruecke", "rating": 5, "description": "Schnelle Übersetzung meiner Produkttexte, sogar mit Hinweisen zu Formulierungen."},
+    {"reviewer": "emma_richter", "business": "socialschmiede", "rating": 3, "description": "Die Posts sind gut, ich hätte mir aber mehr Abstimmung zu meinem Stil gewünscht."},
+    {"reviewer": "finn_wolf", "business": "formraum_3d", "rating": 5, "description": "Die Renderings haben dem Bauherrn sofort gefallen. Sehr präzise Umsetzung der Pläne."},
+    {"reviewer": "finn_wolf", "business": "podcastschnitt", "rating": 2, "description": "Ich musste stornieren, weil der Termin nicht gepasst hat. Die Rückabwicklung war aber fair."},
+    {"reviewer": "greta_neumann", "business": "tintenfisch_illu", "rating": 5, "description": "Das Motiv für mein Podcast-Cover ist wunderschön geworden."},
+    {"reviewer": "greta_neumann", "business": "startklar_beratung", "rating": 4, "description": "Gutes Erstgespräch mit vielen konkreten Tipps zur Preisgestaltung."},
+    {"reviewer": "hannes_braun", "business": "serverpilot", "rating": 5, "description": "Server läuft, Backups laufen, ich verstehe sogar die Doku. Was will man mehr."},
+    {"reviewer": "hannes_braun", "business": "pixelwerk_berlin", "rating": 4, "description": "Schlanke Landingpage für mein Buchprojekt, gerne wieder."},
+    {"reviewer": "ida_zimmermann", "business": "lichtblick_foto", "rating": 5, "description": "Die Teamfotos für die neue Praxis sind natürlich und freundlich geworden."},
+    {"reviewer": "ida_zimmermann", "business": "seo_kompass", "rating": 4, "description": "Nach der Onpage-Optimierung finden uns deutlich mehr Patienten über Google."},
+    {"reviewer": "jakob_hoffmann", "business": "markenschmiede", "rating": 4, "description": "Sauberes Logo-Redesign, die Abstimmung hat etwas länger gedauert als angekündigt."},
+    {"reviewer": "jakob_hoffmann", "business": "wortwerkstatt", "rating": 3, "description": "Storniert wegen Zeitmangel auf meiner Seite. Die Erstberatung war trotzdem hilfreich."}
+  ]
+}
