@@ -3,6 +3,8 @@
 REST API for the Coderr platform, built with Django and Django REST Framework.
 Business users publish offers, customers order them and rate the provider afterwards.
 
+Livetest: https://www.puercherjoachim.com/coderr/
+
 ## Stack
 
 | | |
